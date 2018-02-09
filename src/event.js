@@ -32,9 +32,3 @@ exports.handle = function handle(session, code, arg) {
         func(session, arg);
     }
 }
-
-window.addEventListener('load', () => {
-    const session = Object.create(null);
-    window.getSession = () => session; // NOTE: For debugging introspection.
-    exports.handle(session, 'start');
-});

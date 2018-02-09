@@ -3,7 +3,6 @@ const ClearAll = require('skid/lib/scene/clear-all');
 const Smoothing = require('skid/lib/scene/smoothing');
 const Camera = require('skid/lib/scene/camera');
 const Group = require('skid/lib/scene/group');
-const Atlas = require('skid/lib/scene/atlas');
 const {addHandler} = require('./event');
 
 addHandler('start', (session) => {
@@ -18,7 +17,6 @@ addHandler('start', (session) => {
     camera.h.setTo(.75);
 
     const world = new Group(camera);
-    const atlas = new Atlas();
 
-    session.scene = { atlas, world };
+    session.scene = {world};
 });
