@@ -1,3 +1,3 @@
-./node_modules/.bin/browserify ./src/js.js --outfile ./dist/comparative_advantage.js --debug
-cp ./src/html.html ./dist/comparative_advantage.html
+./node_modules/.bin/browserify ./src/js.js --outfile ./dist/js.js --debug
+cp ./src/html.html ./dist/index.html
 cp -r ./src/assets ./dist

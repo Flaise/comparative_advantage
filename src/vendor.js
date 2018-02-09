@@ -9,7 +9,7 @@ addHandler('start', (session) => {
     loadVendor(session, 'vendor3', { left: 626, top: 425, right: 718, bottom: 503 });
     loadVendor(session, 'vendor4', { left: 792, top: 601, right: 907, bottom: 701 });
 
-    window.addEventListener('mousemove', (event) => onMouseMove(session, event));
+    canvas.addEventListener('mousemove', (event) => onMouseMove(session, event));
 });
 
 function between(n, min, max) {
@@ -22,10 +22,12 @@ function overlapsVendor(x, y, vendor) {
 }
 
 function onMouseMove(session, event) {
-    console.log('mouse', event.clientX, event.clientY);
+    const x = event.pageX - canvas.offsetLeft;
+    const y = event.pageY - canvas.offsetTop;
+    console.log('mouse', x, y);
 
     for (const vendor of session.vendors) {
-        if (overlapsVendor(event.clientX, event.clientY, vendor)) {
+        if (overlapsVendor(x, y, vendor)) {
             vendor.visibility.visible = true;
         } else {
             vendor.visibility.visible = false;

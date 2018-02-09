@@ -7,9 +7,6 @@ const Atlas = require('skid/lib/scene/atlas');
 const {addHandler} = require('./event');
 
 addHandler('start', (session) => {
-    canvas.width = 1000;
-    canvas.height = 750;
-
     const renderer = new Viewport();
     renderer.canvas = canvas;
 
