@@ -4,6 +4,7 @@ const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 
 addHandler('start', (session) => {
+    session.vendorsEnabled = true;
     session.vendors = [];
     loadVendor(session, 'vendor1', {left: 139, top: 585, right: 243, bottom: 664});
     loadVendor(session, 'vendor2', {left: 268, top: 434, right: 365, bottom: 508});
@@ -11,7 +12,19 @@ addHandler('start', (session) => {
     loadVendor(session, 'vendor4', {left: 792, top: 601, right: 907, bottom: 701});
 });
 
+addHandler('proceed', (session) => {
+    session.vendorsEnabled = false;
+    for (const vendor of session.vendors) {
+        vendor.visibility.visible = false;
+    }
+});
+
+addHandler('endproceed', (session) => {
+    session.vendorsEnabled = true;
+});
+
 addHandler('mousemove', (session, {x, y}) => {
+    if (!session.vendorsEnabled) return;
     for (const vendor of session.vendors) {
         if (overlapsBounds(x, y, vendor.bounds)) {
             vendor.visibility.visible = true;

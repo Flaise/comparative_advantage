@@ -5,6 +5,8 @@ require('./vendor');
 require('./ship');
 require('./proceed');
 require('./input');
+require('./inventory');
+require('./commodity');
 
 const Atlas = require('skid/lib/scene/atlas');
 const {handle} = require('./event');
