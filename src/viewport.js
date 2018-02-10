@@ -17,6 +17,7 @@ addHandler('start', (session) => {
     camera.h.setTo(.75);
 
     const world = new Group(camera);
+    const ui = new Group(camera);
 
-    session.scene = {world};
+    session.scene = {world, camera, ui};
 });
