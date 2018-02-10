@@ -5,6 +5,7 @@ const {addHandler} = require('./event');
 const {commodityOfType} = require('./commodity');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
+const {linear} = require('skid/lib/tween');
 
 const slotPositions = [
     {left: .28, top: .08, width: .05, height: .05},
@@ -21,10 +22,11 @@ addHandler('start', (session) => {
         makeSlot(session, left, top);
     }
 
-    gainCommodity(session, 'food', 5);
-    gainCommodity(session, 'food', 5);
-    gainCommodity(session, 'gold', 3);
-    gainCommodity(session, 'silver', 9);
+    gainCommodity(session, 'food', 5, true);
+    gainCommodity(session, 'food', 5, true);
+    gainCommodity(session, 'gold', 3, true);
+    gainCommodity(session, 'silver', 9, true);
+    gainCommodity(session, 'silver', 1);
 });
 
 addHandler('mousemove', (session, {x, y}) => {
@@ -51,21 +53,26 @@ function makeSlot(session, x, y) {
     text.textAlign = 'center';
     text.textBaseline = 'bottom';
     text.fillStyle = 'white';
-    text.font = '26px verdana';
+    text.font = '24px verdana';
 
     const avatar = new IconAvatar(session.scene.world, undefined, x, y, .05, .05);
     avatar.layer = 6;
 
-    const slot = {avatar, text, textVisible, type: undefined, amount: 0};
+    const slot = {avatar, text, textVisible, type: undefined, amount: 0,
+                  index: session.inventory.length};
     session.inventory.push(slot);
 }
 
-function gainCommodity(session, type, amount) {
+function gainCommodity(session, type, amount, silent = false) {
     const commodity = commodityOfType(type);
     for (const slot of session.inventory) {
         if (slot.type === type) {
             slot.amount += amount;
-            slot.text.text = amount + ' ' + commodity.name;
+            slot.text.text = slot.amount + ' ' + commodity.name;
+            if (!silent) {
+                const position = slotPositions[slot.index];
+                risingText(session, position.left + position.width / 2, position.top, '+' + amount);
+            }
             return;
         }
     }
@@ -75,6 +82,42 @@ function gainCommodity(session, type, amount) {
             slot.amount = amount;
             slot.avatar.icon = commodity.icon;
             slot.text.text = amount + ' ' + commodity.name;
+            if (!silent) {
+                const position = slotPositions[slot.index];
+                risingText(session, position.left + position.width / 2, position.top, '+' + amount);
+            }
+            return;
+        }
+    }
+}
+
+function risingText(session, x, y, content) {
+    const textPosition = new Translation(session.scene.ui);
+    textPosition.x.setTo(x);
+    textPosition.y.setTo(y);
+    textPosition.y.mod(-.035, 900, linear, () => textPosition.remove());
+
+    const text = new TextAvatar(textPosition, session.scene.camera);
+    text.text = content;
+    text.textAlign = 'center';
+    text.textBaseline = 'bottom';
+    text.fillStyle = 'white';
+    text.font = '22px verdana';
+}
+
+function loseCommodity(session, type, amount) {
+    if (amount === 0) return;
+    for (const slot of session.inventory) {
+        if (slot.type === type) {
+            slot.amount -= amount;
+
+            const position = slotPositions[slot.index];
+            risingText(session, position.left + position.width / 2, position.top, '-' + amount);
+
+            if (slot.amount <= 0) {
+                slot.amount = 0;
+                slot.type = undefined;
+            }
             return;
         }
     }
