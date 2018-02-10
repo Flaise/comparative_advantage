@@ -23,10 +23,9 @@ addHandler('start', (session) => {
     }
 
     gainCommodity(session, 'food', 5, true);
-    gainCommodity(session, 'food', 5, true);
     gainCommodity(session, 'gold', 3, true);
     gainCommodity(session, 'silver', 9, true);
-    gainCommodity(session, 'silver', 1);
+    gainCommodity(session, 'slave', 2, true);
 });
 
 addHandler('mousemove', (session, {x, y}) => {
@@ -90,6 +89,7 @@ function gainCommodity(session, type, amount, silent = false) {
         }
     }
 }
+exports.gainCommodity = gainCommodity;
 
 function risingText(session, x, y, content) {
     const textPosition = new Translation(session.scene.ui);
@@ -107,9 +107,11 @@ function risingText(session, x, y, content) {
 
 function loseCommodity(session, type, amount) {
     if (amount === 0) return;
+    const commodity = commodityOfType(type);
     for (const slot of session.inventory) {
         if (slot.type === type) {
             slot.amount -= amount;
+            slot.text.text = slot.amount + ' ' + commodity.name;
 
             const position = slotPositions[slot.index];
             risingText(session, position.left + position.width / 2, position.top, '-' + amount);
@@ -117,8 +119,38 @@ function loseCommodity(session, type, amount) {
             if (slot.amount <= 0) {
                 slot.amount = 0;
                 slot.type = undefined;
+                slot.avatar.icon = undefined;
             }
             return;
         }
     }
 }
+exports.loseCommodity = loseCommodity;
+
+function amountOf(session, type) {
+    for (const slot of session.inventory) {
+        if (slot.type === type) {
+            return slot.amount;
+        }
+    }
+    return 0;
+}
+exports.amountOf = amountOf;
+
+function slotsFree(session) {
+    let result = 0;
+    for (const slot of session.inventory) {
+        if (slot.type == undefined) {
+            result += 1;
+        }
+    }
+    return result;
+}
+
+exports.canTrade = function canTrade(session, inType, outType, outAmount) {
+    const heldOutAmount = amountOf(session, outType);
+    if (heldOutAmount < outAmount) return false;
+    if (heldOutAmount === outAmount) return true;
+    if (slotsFree(session) > 0) return true;
+    return false;
+};

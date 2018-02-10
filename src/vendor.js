@@ -3,6 +3,13 @@ const {addHandler} = require('./event');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 
+addHandler('load', (session) => {
+    loadImage(session, 'vendor1');
+    loadImage(session, 'vendor2');
+    loadImage(session, 'vendor3');
+    loadImage(session, 'vendor4');
+})
+
 addHandler('start', (session) => {
     session.vendorsEnabled = true;
     session.vendors = [];
@@ -19,8 +26,14 @@ addHandler('proceed', (session) => {
     }
 });
 
-addHandler('endproceed', (session) => {
+addHandler('proceed_done', (session) => {
     session.vendorsEnabled = true;
+});
+
+addHandler('start proceed_done', (session) => {
+    for (const vendor of session.vendors) {
+
+    }
 });
 
 addHandler('mousemove', (session, {x, y}) => {
@@ -35,12 +48,15 @@ addHandler('mousemove', (session, {x, y}) => {
     }
 });
 
-function loadVendor(session, baseName, bounds) {
+function loadImage(session, baseName) {
     const icon = session.atlas.get(baseName);
     icon.loadImage(`./assets/${baseName}.png`, `${baseName}_0_0_1000`);
+}
+
+function loadVendor(session, baseName, bounds) {
     const visibility = new Visibility(session.scene.world);
     visibility.visible = false;
-    const avatar = new IconAvatar(visibility, icon, 0, 0, 1, 1);
+    const avatar = new IconAvatar(visibility, session.atlas.get(baseName), 0, 0, 1, 1);
     avatar.layer = 3;
     session.vendors.push({
         visibility,

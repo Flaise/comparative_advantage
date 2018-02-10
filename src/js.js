@@ -7,6 +7,7 @@ require('./proceed');
 require('./input');
 require('./inventory');
 require('./commodity');
+require('./eat');
 
 const Atlas = require('skid/lib/scene/atlas');
 const {handle} = require('./event');

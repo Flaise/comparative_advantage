@@ -17,7 +17,7 @@ addHandler('load', (session) => {
     // commodities['salt'] = {name: 'Salt', icon: iconOf(session, 'sugar', '0_0_50')};
     // commodities['cutlass'] = {name: 'Cutlasses', icon: iconOf(session, 'cutlass', '0_0_50')};
     // commodities['cutlad'] = {name: 'Cutlads', icon: iconOf(session, 'cutlad', '0_0_50')};
-    // commodities['slave'] = {name: 'Slaves', icon: iconOf(session, 'slave', '0_0_50')};
+    commodities['slave'] = {name: 'Slaves', icon: iconOf(session, 'slave', '0_0_50')};
     // commodities['tulip'] = {name: 'Tulips', icon: iconOf(session, 'tulip', '0_0_50')};
 });
 

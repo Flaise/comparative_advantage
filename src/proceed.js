@@ -13,7 +13,7 @@ addHandler('load', (session) => {
     session.proceed = {iconNormal, iconHighlight};
 });
 
-addHandler('start endproceed', (session) => {
+addHandler('start proceed_done', (session) => {
     const position = new Translation(session.scene.world);
     position.x.setTo(.88);
     position.y.setTo(.02);

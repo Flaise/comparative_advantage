@@ -13,8 +13,12 @@ addHandler('start', (session) => {
 });
 
 addHandler('proceed', (session) => {
-    session.port.position.x.modTo(-1, 3000, reverseSine, (remainder) => {
+    session.port.position.x.modTo(-1, 2000, reverseSine, (remainder) => {
         session.port.position.x.setTo(1);
-        session.port.position.x.modTo(0, 3000, sine, () => handle(session, 'endproceed'), remainder);
+        handle(session, 'proceed_eat');
     });
+});
+
+addHandler('proceed_eat_done', (session) => {
+    session.port.position.x.modTo(0, 2000, sine, () => handle(session, 'proceed_done'));
 });
