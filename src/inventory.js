@@ -1,7 +1,7 @@
 const IconAvatar = require('skid/lib/scene/icon-avatar');
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
-const {addHandler} = require('./event');
+const {addHandler, handle} = require('./event');
 const {commodityOfType} = require('./commodity');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
@@ -22,9 +22,9 @@ addHandler('start', (session) => {
         makeSlot(session, left, top);
     }
 
-    gainCommodity(session, 'food', 30, true);
-    gainCommodity(session, 'gold', 3, true);
-    gainCommodity(session, 'silver', 10, true);
+    handle(session, 'gain', {type: 'food', amount: 30, silent: true});
+    handle(session, 'gain', {type: 'gold', amount: 5, silent: true});
+    handle(session, 'gain', {type: 'silver', amount: 20, silent: true});
 });
 
 addHandler('mousemove', (session, {x, y}) => {
@@ -61,7 +61,7 @@ function makeSlot(session, x, y) {
     session.inventory.push(slot);
 }
 
-function gainCommodity(session, type, amount, silent = false) {
+function gainCommodity(session, {type, amount, silent = false}) {
     const commodity = commodityOfType(type);
     for (const slot of session.inventory) {
         if (slot.type === type) {
@@ -88,7 +88,6 @@ function gainCommodity(session, type, amount, silent = false) {
         }
     }
 }
-exports.gainCommodity = gainCommodity;
 
 function risingText(session, x, y, content) {
     const textPosition = new Translation(session.scene.ui);
@@ -104,7 +103,7 @@ function risingText(session, x, y, content) {
     text.font = '22px verdana';
 }
 
-function loseCommodity(session, type, amount) {
+function loseCommodity(session, {type, amount}) {
     if (amount === 0) return;
     const commodity = commodityOfType(type);
     for (const slot of session.inventory) {
@@ -124,7 +123,14 @@ function loseCommodity(session, type, amount) {
         }
     }
 }
-exports.loseCommodity = loseCommodity;
+
+addHandler('gain', (session, {type, amount, silent}) => {
+    gainCommodity(session, {type, amount, silent});
+});
+
+addHandler('lose', (session, {type, amount}) => {
+    loseCommodity(session, {type, amount});
+});
 
 function amountOf(session, type) {
     for (const slot of session.inventory) {
@@ -150,6 +156,7 @@ exports.canTrade = function canTrade(session, inType, outType, outAmount) {
     const heldOutAmount = amountOf(session, outType);
     if (heldOutAmount < outAmount) return false;
     if (heldOutAmount === outAmount) return true;
+    if (amountOf(session, inType) > 0) return true;
     if (slotsFree(session) > 0) return true;
     return false;
 };

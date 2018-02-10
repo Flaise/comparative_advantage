@@ -1,5 +1,5 @@
 const {addHandler, handle, handleLater} = require('./event');
-const {amountOf, loseCommodity, gainCommodity} = require('./inventory');
+const {amountOf} = require('./inventory');
 
 addHandler('proceed', (session) => {
     session.foodCost = Math.floor(Math.random() * 3) + 1;
@@ -12,12 +12,12 @@ addHandler('proceed_eat', (session) => {
     }
     const foodHeld = amountOf(session, 'food');
     if (foodHeld > 0) {
-        const consumed = Math.min(foodHeld, session.foodCost);
-        loseCommodity(session, 'food', consumed);
-        session.foodCost -= consumed;
+        const amount = Math.min(foodHeld, session.foodCost);
+        session.foodCost -= amount;
+        handle(session, 'lose', {type: 'food', amount});
     } else if (amountOf(session, 'slave') > 0) {
-        loseCommodity(session, 'slave', 1);
-        gainCommodity(session, 'food', 5);
+        handle(session, 'lose', {type: 'slave', amount: 1});
+        handle(session, 'gain', {type: 'food', amount: 6});
     } else {
         handle(session, 'proceed_starve');
         return;

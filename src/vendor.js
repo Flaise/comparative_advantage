@@ -1,10 +1,11 @@
 const IconAvatar = require('skid/lib/scene/icon-avatar');
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
-const {addHandler} = require('./event');
+const {addHandler, handle, handleLater} = require('./event');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType} = require('./commodity');
+const {canTrade} = require('./inventory');
 
 addHandler('load', (session) => {
     loadImage(session, 'vendor1');
@@ -46,6 +47,18 @@ addHandler('mousemove', (session, {x, y}) => {
             vendor.visibility.visible = false;
         }
         vendor.visibility.changed();
+    }
+});
+
+addHandler('mousedown', (session, {x, y}) => {
+    if (!session.vendorsEnabled) return;
+    for (const vendor of session.vendors) {
+        if (overlapsBounds(x, y, vendor.bounds)
+        && canTrade(session, vendor.sell.type, vendor.buy.type, vendor.buyCount)) {
+            handle(session, 'lose', {type: vendor.buy.type, amount: vendor.buyCount});
+            handleLater(session, 200, 'gain', {type: vendor.sell.type, amount: vendor.sellCount});
+            return;
+        }
     }
 });
 
@@ -138,6 +151,8 @@ addHandler('start proceed_done', (session) => {
         buyCount = Math.ceil(buyCount);
         sellCount = Math.ceil(sellCount);
 
+        vendor.buyCount = buyCount;
+        vendor.sellCount = sellCount;
         vendor.text.text = `${buyCount} ${buy.name} ${RARR} ${sellCount} ${sell.name}`;
     }
 });
