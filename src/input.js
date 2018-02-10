@@ -13,6 +13,5 @@ addHandler('start', (session) => {
 function mouseXY(event) {
     const x = event.pageX - canvas.offsetLeft;
     const y = event.pageY - canvas.offsetTop;
-    console.log('mouse', x, y);
     return {x, y};
 }

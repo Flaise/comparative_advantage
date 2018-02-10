@@ -23,12 +23,19 @@ exports.addHandler =  function addHandler(code, handler) {
     }
 }
 
-exports.handle = function handle(session, code, arg) {
+function handle(session, code, arg) {
     if (!session) throw new Error();
     if (typeof session !== 'object') throw new Error();
+    console.log(code, arg);
     const list = handlers[code];
     if (!list) return;
     for (const func of list) {
         func(session, arg);
     }
 }
+exports.handle = handle;
+
+exports.handleLater = function handleLater(session, delay, code, arg) {
+    setTimeout(() => handle(session, code, arg), delay);
+    // TODO: time remainder calculation would go here
+};

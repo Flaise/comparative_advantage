@@ -1,7 +1,7 @@
 const IconAvatar = require('skid/lib/scene/icon-avatar');
 const Translation = require('skid/lib/scene/translation');
 const {reverseSine, sine} = require('skid/lib/tween');
-const {addHandler, handle} = require('./event');
+const {addHandler, handleLater} = require('./event');
 
 addHandler('start', (session) => {
     const icon = session.atlas.get('port1');
@@ -13,12 +13,12 @@ addHandler('start', (session) => {
 });
 
 addHandler('proceed', (session) => {
-    session.port.position.x.modTo(-1, 2000, reverseSine, (remainder) => {
-        session.port.position.x.setTo(1);
-        handle(session, 'proceed_eat');
-    });
+    session.port.position.x.modTo(-1, 2000, reverseSine);
+    handleLater(session, 2000, 'proceed_eat');
 });
 
 addHandler('proceed_eat_done', (session) => {
-    session.port.position.x.modTo(0, 2000, sine, () => handle(session, 'proceed_done'));
+    session.port.position.x.setTo(1);
+    session.port.position.x.modTo(0, 2000, sine);
+    handleLater(session, 2000, 'proceed_done');
 });
