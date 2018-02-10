@@ -22,10 +22,9 @@ addHandler('start', (session) => {
         makeSlot(session, left, top);
     }
 
-    gainCommodity(session, 'food', 5, true);
+    gainCommodity(session, 'food', 30, true);
     gainCommodity(session, 'gold', 3, true);
-    gainCommodity(session, 'silver', 9, true);
-    gainCommodity(session, 'slave', 2, true);
+    gainCommodity(session, 'silver', 10, true);
 });
 
 addHandler('mousemove', (session, {x, y}) => {

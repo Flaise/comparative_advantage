@@ -2,7 +2,7 @@ const {addHandler, handle, handleLater} = require('./event');
 const {amountOf, loseCommodity, gainCommodity} = require('./inventory');
 
 addHandler('proceed', (session) => {
-    session.foodCost = Math.floor(Math.random() * 7) + 1;
+    session.foodCost = Math.floor(Math.random() * 3) + 1;
 });
 
 addHandler('proceed_eat', (session) => {
