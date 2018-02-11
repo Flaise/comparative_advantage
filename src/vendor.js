@@ -4,8 +4,11 @@ const TextAvatar = require('skid/lib/scene/text-avatar');
 const {addHandler, handle, handleLater} = require('./event');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
-const {commodityTypes, commodityOfType} = require('./commodity');
-const {canTrade} = require('./inventory');
+const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
+const {canTrade, amountOf} = require('./inventory');
+const {inputEnabled} = require('./input');
+
+const RARR = '\u2192';
 
 addHandler('load', (session) => {
     loadImage(session, 'vendor1');
@@ -55,8 +58,12 @@ addHandler('mousedown', (session, {x, y}) => {
     for (const vendor of session.vendors) {
         if (overlapsBounds(x, y, vendor.bounds)
         && canTrade(session, vendor.sell.type, vendor.buy.type, vendor.buyCount)) {
-            handle(session, 'lose', {type: vendor.buy.type, amount: vendor.buyCount});
-            handleLater(session, 200, 'gain', {type: vendor.sell.type, amount: vendor.sellCount});
+            // NOTE: Save these here because vendor gets rescaled during 'lose' event.
+            const {buyCount, sellCount} = vendor;
+            handle(session, 'inputconfigure', {type: 'mousedown', enabled: false});
+            handle(session, 'lose', {type: vendor.buy.type, amount: buyCount});
+            handleLater(session, 200, 'gain', {type: vendor.sell.type, amount: sellCount});
+            handleLater(session, 500, 'inputconfigure', {type: 'mousedown', enabled: true});
             return;
         }
     }
@@ -86,8 +93,6 @@ function makeVendor(session, baseName, bounds) {
 
     session.vendors.push({visibility, bounds, text});
 }
-
-const RARR = '\u2192';
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array) {
@@ -151,8 +156,62 @@ addHandler('start proceed_done', (session) => {
         buyCount = Math.ceil(buyCount);
         sellCount = Math.ceil(sellCount);
 
-        vendor.buyCount = buyCount;
-        vendor.sellCount = sellCount;
-        vendor.text.text = `${buyCount} ${buy.name} ${RARR} ${sellCount} ${sell.name}`;
+        vendor.baseBuyCount = buyCount;
+        vendor.baseSellCount = sellCount;
     }
+
+    scaleVendors(session);
+});
+
+function buyText(vendor) {
+    return commodityDisplay(vendor.buy, vendor.buyCount);
+}
+
+function sellText(vendor) {
+    return commodityDisplay(vendor.sell, vendor.sellCount);
+}
+
+function scaleVendors(session) {
+    if (!session.vendors) return;
+    for (const vendor of session.vendors) {
+        vendor.buyCount = vendor.baseBuyCount;
+        vendor.sellCount = vendor.baseSellCount;
+        const amountHeld = amountOf(session, vendor.buy.type);
+        if (amountHeld >= vendor.baseBuyCount * 20) {
+            vendor.buyCount *= 10;
+            vendor.sellCount *= 10;
+        } else if (amountHeld >= vendor.baseBuyCount * 10) {
+            vendor.buyCount *= 5;
+            vendor.sellCount *= 5;
+        }
+        vendor.text.text = `${buyText(vendor)} ${RARR} ${sellText(vendor)}`;
+    }
+}
+
+function updateVendorTextColor(session) {
+    // NOTE: this file imports inventory so inventory always fires 'gain' events first
+    if (!session.vendors) return;
+    if (!inputEnabled(session, 'mousedown')) {
+        for (const vendor of session.vendors) {
+            vendor.text.fillStyle = 'transparent';
+            vendor.text.changed();
+        }
+        return;
+    }
+    for (const vendor of session.vendors) {
+        if (amountOf(session, vendor.buy.type) >= vendor.buyCount) {
+            vendor.text.fillStyle = 'white';
+        } else {
+            vendor.text.fillStyle = '#ccc';
+        }
+        vendor.text.changed();
+    }
+}
+
+addHandler('start proceed_done gain lose inputconfigure', (session) => {
+    updateVendorTextColor(session);
+});
+
+addHandler('gain lose', (session) => {
+    scaleVendors(session);
 });
