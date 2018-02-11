@@ -58,7 +58,7 @@ addHandler('mousedown', (session, {x, y}) => {
     for (const vendor of session.vendors) {
         if (overlapsBounds(x, y, vendor.bounds)
         && canTrade(session, vendor.sell.type, vendor.buy.type, vendor.buyCount)) {
-            // NOTE: Save these here because vendor gets rescaled during 'lose' event.
+            // Save these here because vendor gets rescaled during 'lose' event.
             const {buyCount, sellCount} = vendor;
             handle(session, 'inputconfigure', {type: 'mousedown', enabled: false});
             handle(session, 'lose', {type: vendor.buy.type, amount: buyCount});
@@ -154,8 +154,6 @@ addHandler('start proceed_done', (session) => {
             buyCount /= sellCount;
             sellCount = 1;
         }
-        buyCount = Math.ceil(buyCount);
-        sellCount = Math.ceil(sellCount);
 
         vendor.baseBuyCount = buyCount;
         vendor.baseSellCount = sellCount;
@@ -185,12 +183,14 @@ function scaleVendors(session) {
             vendor.buyCount *= 5;
             vendor.sellCount *= 5;
         }
+        vendor.buyCount = Math.ceil(vendor.buyCount);
+        vendor.sellCount = Math.ceil(vendor.sellCount);
         vendor.text.text = `${buyText(vendor)} ${RARR} ${sellText(vendor)}`;
     }
 }
 
 function updateVendorTextColor(session) {
-    // NOTE: this file imports inventory so inventory always fires 'gain' events first
+    // this file imports inventory so inventory always fires 'gain' events first
     if (!session.vendors) return;
     if (!session.vendorsEnabled) {
         for (const vendor of session.vendors) {
@@ -201,7 +201,7 @@ function updateVendorTextColor(session) {
     }
     if (!inputEnabled(session, 'mousedown')) {
         for (const vendor of session.vendors) {
-            vendor.text.fillStyle = '#ccc';
+            vendor.text.fillStyle = '#aaa';
             vendor.text.changed();
         }
         return;

@@ -22,9 +22,9 @@ addHandler('start', (session) => {
         makeSlot(session, left, top);
     }
 
-    handle(session, 'gain', {type: 'food', amount: 30, silent: true});
-    handle(session, 'gain', {type: 'gold', amount: 2, silent: true});
-    handle(session, 'gain', {type: 'silver', amount: 20, silent: true});
+    updateSlot(session.inventory[0], 'food', 30);
+    updateSlot(session.inventory[1], 'gold', 2);
+    updateSlot(session.inventory[2], 'silver', 20);
 });
 
 addHandler('mousemove', (session, {x, y}) => {
@@ -63,31 +63,22 @@ function makeSlot(session, x, y) {
     session.inventory.push(slot);
 }
 
-function gainCommodity(session, {type, amount, silent = false}) {
-    const commodity = commodityOfType(type);
-    for (const slot of session.inventory) {
-        if (slot.type === type) {
-            slot.amount += amount;
-            slot.text.text = commodityDisplay(commodity, slot.amount);
-            if (!silent) {
-                const position = slotPositions[slot.index];
-                risingText(session, position.left + position.width / 2, position.top, '+' + amount);
-            }
-            return;
-        }
+function updateSlot(slot, type, amount) {
+    slot.type = type;
+    if (type) {
+        slot.amount = amount;
+    } else {
+        slot.amount = 0;
     }
-    for (const slot of session.inventory) {
-        if (slot.type == undefined) {
-            slot.type = type;
-            slot.amount = amount;
-            slot.avatar.icon = commodity.icon;
-            slot.text.text = commodityDisplay(commodity, slot.amount);
-            if (!silent) {
-                const position = slotPositions[slot.index];
-                risingText(session, position.left + position.width / 2, position.top, '+' + amount);
-            }
-            return;
-        }
+
+    if (slot.amount <= 0) {
+        slot.amount = 0;
+        slot.type = undefined;
+        slot.avatar.icon = undefined;
+    } else {
+        const commodity = commodityOfType(type);
+        slot.avatar.icon = commodity.icon;
+        slot.text.text = commodityDisplay(commodity, slot.amount);
     }
 }
 
@@ -107,33 +98,37 @@ function risingText(session, x, y, content) {
     text.font = '22px verdana';
 }
 
-function loseCommodity(session, {type, amount}) {
-    if (amount === 0) return;
-    const commodity = commodityOfType(type);
+function slotRisingText(session, slot, content) {
+    const position = slotPositions[slot.index];
+    risingText(session, position.left + position.width / 2, position.top, content);
+}
+
+addHandler('gain', (session, {type, amount}) => {
     for (const slot of session.inventory) {
         if (slot.type === type) {
-            slot.amount -= amount;
-            slot.text.text = commodityDisplay(commodity, slot.amount);
-
-            const position = slotPositions[slot.index];
-            risingText(session, position.left + position.width / 2, position.top, '-' + amount);
-
-            if (slot.amount <= 0) {
-                slot.amount = 0;
-                slot.type = undefined;
-                slot.avatar.icon = undefined;
-            }
+            updateSlot(slot, type, slot.amount + amount);
+            slotRisingText(session, slot, '+' + amount);
             return;
         }
     }
-}
-
-addHandler('gain', (session, {type, amount, silent}) => {
-    gainCommodity(session, {type, amount, silent});
+    for (const slot of session.inventory) {
+        if (slot.type == undefined) {
+            updateSlot(slot, type, amount);
+            slotRisingText(session, slot, '+' + amount);
+            return;
+        }
+    }
 });
 
 addHandler('lose', (session, {type, amount}) => {
-    loseCommodity(session, {type, amount});
+    if (amount === 0) return;
+    for (const slot of session.inventory) {
+        if (slot.type === type) {
+            updateSlot(slot, type, slot.amount - amount);
+            slotRisingText(session, slot, '-' + amount);
+            return;
+        }
+    }
 });
 
 function amountOf(session, type) {
