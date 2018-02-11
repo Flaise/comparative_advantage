@@ -1,6 +1,6 @@
 const handlers = Object.create(null);
 
-exports.addHandler =  function addHandler(code, handler) {
+exports.addHandler = function addHandler(code, handler) {
     if (typeof handler !== 'function') throw new Error();
 
     let keys;

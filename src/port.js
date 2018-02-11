@@ -18,7 +18,7 @@ addHandler('proceed', (session) => {
     handleLater(session, 1500, 'proceed_eat');
 });
 
-addHandler('proceed_eat_done', (session) => {
+addHandler('proceed_eat_done restart', (session) => {
     session.port.position.x.setTo(2);
     session.port.position.x.modTo(-.5, 1200, sine);
     handleLater(session, 1200, 'proceed_done');

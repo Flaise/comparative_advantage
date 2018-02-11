@@ -13,15 +13,20 @@ const slotPositions = [
     {left: .43, top: .19, width: .05, height: .05},
     {left: .55, top: .17, width: .05, height: .05},
     {left: .61, top: .19, width: .05, height: .05},
+    {left: .42, top: .14, width: .05, height: .05},
 ];
 
 addHandler('start', (session) => {
     session.inventory = [];
-
     for (const {left, top} of slotPositions) {
         makeSlot(session, left, top);
     }
+});
 
+addHandler('start restart', (session) => {
+    for (const slot of session.inventory) {
+        updateSlot(slot, undefined, 0);
+    }
     updateSlot(session.inventory[0], 'food', 30);
     updateSlot(session.inventory[1], 'gold', 2);
     updateSlot(session.inventory[2], 'silver', 20);
@@ -29,12 +34,14 @@ addHandler('start', (session) => {
 
 addHandler('mousemove', (session, {x, y}) => {
     for (let i = 0; i < slotPositions.length; i += 1) {
-        if (overlapsBounds(x / 1000.0, y / 1000.0, slotPositions[i])
-        && session.inventory[i].amount) {
-            session.inventory[i].textVisible.visible = true;
+        const position = slotPositions[i];
+        const slot = session.inventory[i];
+        if (overlapsBounds(x / 1000.0, y / 1000.0, position) && slot.amount) {
+            slot.textVisible.visible = true;
         } else {
-            session.inventory[i].textVisible.visible = false;
+            slot.textVisible.visible = false;
         }
+        slot.textVisible.changed();
     }
 });
 
@@ -64,18 +71,14 @@ function makeSlot(session, x, y) {
 }
 
 function updateSlot(slot, type, amount) {
-    slot.type = type;
-    if (type) {
-        slot.amount = amount;
-    } else {
-        slot.amount = 0;
-    }
-
-    if (slot.amount <= 0) {
+    if (!type) amount = 0;
+    if (amount <= 0) {
         slot.amount = 0;
         slot.type = undefined;
         slot.avatar.icon = undefined;
     } else {
+        slot.type = type;
+        slot.amount = amount;
         const commodity = commodityOfType(type);
         slot.avatar.icon = commodity.icon;
         slot.text.text = commodityDisplay(commodity, slot.amount);

@@ -13,7 +13,7 @@ addHandler('load', (session) => {
     session.proceed = {iconNormal, iconHighlight};
 });
 
-addHandler('start proceed_done', (session) => {
+addHandler('start', (session) => {
     const position = new Translation(session.scene.world);
     position.x.setTo(.88);
     position.y.setTo(.02);
@@ -22,17 +22,20 @@ addHandler('start proceed_done', (session) => {
     avatar.layer = 3;
 
     session.proceed.avatar = avatar;
-    session.proceed.avatarRoot = position;
+});
+
+addHandler('proceed_done restart', (session) => {
+    session.proceed.moving = false;
+    session.proceed.avatar.icon = session.proceed.iconNormal;
 });
 
 addHandler('proceed', (session) => {
-    session.proceed.avatarRoot.remove();
-    session.proceed.avatarRoot = undefined;
-    session.proceed.avatar = undefined;
+    session.proceed.moving = true;
+    session.proceed.avatar.icon = undefined;
 });
 
 addHandler('mousemove', (session, {x, y}) => {
-    if (!session.proceed.avatar) return;
+    if (session.proceed.moving) return;
     if (overlapsBounds(x, y, buttonBounds)) {
         session.proceed.avatar.icon = session.proceed.iconHighlight;
     } else {
@@ -41,6 +44,7 @@ addHandler('mousemove', (session, {x, y}) => {
 });
 
 addHandler('mousedown', (session, {x, y}) => {
+    if (session.proceed.moving) return;
     if (overlapsBounds(x, y, buttonBounds)) {
         handle(session, 'proceed');
     }
