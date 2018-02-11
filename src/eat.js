@@ -2,7 +2,7 @@ const {addHandler, handle, handleLater} = require('./event');
 const {amountOf} = require('./inventory');
 
 addHandler('proceed', (session) => {
-    session.foodCost = Math.floor(Math.random() * 3) + 1;
+    session.foodCost = Math.floor(Math.random() * 5) + 1;
 });
 
 addHandler('proceed_eat', (session) => {
@@ -15,6 +15,10 @@ addHandler('proceed_eat', (session) => {
         const amount = Math.min(foodHeld, session.foodCost);
         session.foodCost -= amount;
         handle(session, 'lose', {type: 'food', amount});
+        if (session.foodCost === 0) {
+            handle(session, 'proceed_eat_done');
+            return;
+        }
     } else if (amountOf(session, 'slave') > 0) {
         handle(session, 'lose', {type: 'slave', amount: 1});
         handle(session, 'gain', {type: 'food', amount: 6});
