@@ -27,7 +27,7 @@ addHandler('start', (session) => {
     makeVendor(session, 'vendor3', {left: 626, top: 425, right: 718, bottom: 503});
     makeVendor(session, 'vendor4', {left: 792, top: 601, right: 907, bottom: 701});
     makeVendor(session, 'vendor5', {left: 420, top: 582, right: 524, bottom: 651});
-    makeVendor(session, 'vendor6', {left: 790, top: 430, right: 900, bottom: 510});
+    makeVendor(session, 'vendor6', {left: 790, top: 450, right: 900, bottom: 530});
 });
 
 addHandler('proceed', (session) => {
@@ -63,7 +63,7 @@ addHandler('mousedown', (session, {x, y}) => {
             handle(session, 'inputconfigure', {type: 'mousedown', enabled: false});
             handle(session, 'lose', {type: vendor.buy.type, amount: buyCount});
             handleLater(session, 200, 'gain', {type: vendor.sell.type, amount: sellCount});
-            handleLater(session, 500, 'inputconfigure', {type: 'mousedown', enabled: true});
+            handleLater(session, 450, 'inputconfigure', {type: 'mousedown', enabled: true});
             return;
         }
     }
@@ -81,7 +81,7 @@ function makeVendor(session, baseName, bounds) {
     const avatar = new IconAvatar(visibility, session.atlas.get(baseName), 0, 0, 1, 1);
     avatar.layer = 3;
 
-    const textPosition = new Translation(visibility);
+    const textPosition = new Translation(session.scene.world);
     textPosition.x.setTo((bounds.right + bounds.left) / 2.0 / 1000.0);
     textPosition.y.setTo(bounds.top / 1000.0);
 
@@ -90,6 +90,7 @@ function makeVendor(session, baseName, bounds) {
     text.textBaseline = 'bottom';
     text.fillStyle = 'white';
     text.font = '24px verdana';
+    text.layer = 4;
 
     session.vendors.push({visibility, bounds, text});
 }
@@ -191,9 +192,16 @@ function scaleVendors(session) {
 function updateVendorTextColor(session) {
     // NOTE: this file imports inventory so inventory always fires 'gain' events first
     if (!session.vendors) return;
-    if (!inputEnabled(session, 'mousedown')) {
+    if (!session.vendorsEnabled) {
         for (const vendor of session.vendors) {
             vendor.text.fillStyle = 'transparent';
+            vendor.text.changed();
+        }
+        return;
+    }
+    if (!inputEnabled(session, 'mousedown')) {
+        for (const vendor of session.vendors) {
+            vendor.text.fillStyle = '#ccc';
             vendor.text.changed();
         }
         return;
@@ -208,7 +216,7 @@ function updateVendorTextColor(session) {
     }
 }
 
-addHandler('start proceed_done gain lose inputconfigure', (session) => {
+addHandler('start proceed_done gain lose inputconfigure proceed', (session) => {
     updateVendorTextColor(session);
 });
 

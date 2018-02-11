@@ -19,7 +19,7 @@ addHandler('load', (session) => {
         name: 'Silver', icon: iconOf(session, 'silver', '0_0_50'), fmv: 1, singular: 'Silver',
     };
     commodities['sugar'] = {
-        name: 'Sugar', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .2, singular: 'Sugar',
+        name: 'Sugar', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .4, singular: 'Sugar',
     };
     commodities['cocaine'] = {
         name: 'Cocaines', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .6, singular: 'Cocaine',
