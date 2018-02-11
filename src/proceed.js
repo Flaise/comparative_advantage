@@ -24,7 +24,7 @@ addHandler('start', (session) => {
     session.proceed.avatar = avatar;
 });
 
-addHandler('proceed_done restart', (session) => {
+addHandler('proceed_done', (session) => {
     session.proceed.moving = false;
     session.proceed.avatar.icon = session.proceed.iconNormal;
 });
