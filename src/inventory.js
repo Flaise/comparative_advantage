@@ -8,11 +8,11 @@ const {overlapsBounds} = require('./bounds');
 const {linear} = require('skid/lib/tween');
 
 const slotPositions = [
-    {left: .28, top: .08, width: .05, height: .05},
-    {left: .37, top: .07, width: .05, height: .05},
-    {left: .43, top: .09, width: .05, height: .05},
-    {left: .55, top: .07, width: .05, height: .05},
-    {left: .61, top: .09, width: .05, height: .05},
+    {left: .29, top: .15, width: .05, height: .05},
+    {left: .37, top: .17, width: .05, height: .05},
+    {left: .43, top: .19, width: .05, height: .05},
+    {left: .55, top: .17, width: .05, height: .05},
+    {left: .61, top: .19, width: .05, height: .05},
 ];
 
 addHandler('start', (session) => {
@@ -51,6 +51,8 @@ function makeSlot(session, x, y) {
     text.textAlign = 'center';
     text.textBaseline = 'bottom';
     text.fillStyle = 'white';
+    text.strokeStyle = 'black';
+    text.lineWidth = 4;
     text.font = '24px verdana';
 
     const avatar = new IconAvatar(session.scene.world, undefined, x, y, .05, .05);
@@ -100,6 +102,8 @@ function risingText(session, x, y, content) {
     text.textAlign = 'center';
     text.textBaseline = 'bottom';
     text.fillStyle = 'white';
+    text.strokeStyle = 'black';
+    text.lineWidth = 4;
     text.font = '22px verdana';
 }
 
