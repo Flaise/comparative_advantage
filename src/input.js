@@ -1,13 +1,9 @@
 const {addHandler, handle} = require('./event');
 
 addHandler('start', (session) => {
-    canvas.addEventListener('mousemove', (event) => {
-        handle(session, 'mousemove', mouseXY(event));
-    });
-
-    canvas.addEventListener('mousedown', (event) => {
-        handle(session, 'mousedown', mouseXY(event));
-    });
+    session.events = {};
+    startMouseEvent(session, 'mousemove');
+    startMouseEvent(session, 'mousedown');
 });
 
 function mouseXY(event) {
@@ -15,3 +11,18 @@ function mouseXY(event) {
     const y = event.pageY - canvas.offsetTop;
     return {x, y};
 }
+
+function startMouseEvent(session, name) {
+    session.events[name] = true;
+    canvas.addEventListener(name, (event) => {
+        if (session.events[name]) handle(session, name, mouseXY(event));
+    });
+}
+
+addHandler('inputconfigure', (session, {type, enabled}) => {
+    session.events[type] = enabled;
+});
+
+exports.inputEnabled = function inputEnabled(session, type) {
+    return session.events[type];
+};

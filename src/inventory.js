@@ -1,11 +1,11 @@
 const IconAvatar = require('skid/lib/scene/icon-avatar');
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
+const {linear} = require('skid/lib/tween');
 const {addHandler, handle} = require('./event');
-const {commodityOfType} = require('./commodity');
+const {commodityOfType, commodityDisplay} = require('./commodity');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
-const {linear} = require('skid/lib/tween');
 
 const slotPositions = [
     {left: .29, top: .15, width: .05, height: .05},
@@ -23,7 +23,7 @@ addHandler('start', (session) => {
     }
 
     handle(session, 'gain', {type: 'food', amount: 30, silent: true});
-    handle(session, 'gain', {type: 'gold', amount: 5, silent: true});
+    handle(session, 'gain', {type: 'gold', amount: 2, silent: true});
     handle(session, 'gain', {type: 'silver', amount: 20, silent: true});
 });
 
@@ -68,7 +68,7 @@ function gainCommodity(session, {type, amount, silent = false}) {
     for (const slot of session.inventory) {
         if (slot.type === type) {
             slot.amount += amount;
-            slot.text.text = slot.amount + ' ' + commodity.name;
+            slot.text.text = commodityDisplay(commodity, slot.amount);
             if (!silent) {
                 const position = slotPositions[slot.index];
                 risingText(session, position.left + position.width / 2, position.top, '+' + amount);
@@ -81,7 +81,7 @@ function gainCommodity(session, {type, amount, silent = false}) {
             slot.type = type;
             slot.amount = amount;
             slot.avatar.icon = commodity.icon;
-            slot.text.text = amount + ' ' + commodity.name;
+            slot.text.text = commodityDisplay(commodity, slot.amount);
             if (!silent) {
                 const position = slotPositions[slot.index];
                 risingText(session, position.left + position.width / 2, position.top, '+' + amount);
@@ -113,7 +113,7 @@ function loseCommodity(session, {type, amount}) {
     for (const slot of session.inventory) {
         if (slot.type === type) {
             slot.amount -= amount;
-            slot.text.text = slot.amount + ' ' + commodity.name;
+            slot.text.text = commodityDisplay(commodity, slot.amount);
 
             const position = slotPositions[slot.index];
             risingText(session, position.left + position.width / 2, position.top, '-' + amount);
@@ -137,6 +137,7 @@ addHandler('lose', (session, {type, amount}) => {
 });
 
 function amountOf(session, type) {
+    if (typeof type !== 'string') throw new Error();
     for (const slot of session.inventory) {
         if (slot.type === type) {
             return slot.amount;
