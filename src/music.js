@@ -26,7 +26,7 @@ addHandler('pagevisible', (session, visible) => {
     }
 });
 
-addHandler('mousedown', (session) => {
+addHandler('mousemove', (session) => {
     if (session.music.state === 'loaded') {
         session.music.sound.play('first');
         session.music.state = 'played';

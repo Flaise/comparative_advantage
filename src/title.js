@@ -1,7 +1,16 @@
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
 const Group = require('skid/lib/scene/group');
+const {Howl} = require('howler');
 const {addHandler} = require('./event');
+
+addHandler('load', (session) => {
+    const sound = new Howl({
+        src: ['./assets/menu.ogg', './assets/menu.mp3'],
+        loop: true,
+    });
+    session.title = {sound, played: false};
+});
 
 addHandler('start', (session) => {
     const group = new Group(session.scene.ui);
@@ -76,9 +85,17 @@ addHandler('start', (session) => {
     text.font = '24px verdana';
     text.layer = 9;
 
-    session.title = {group};
+    session.title.group = group;
 });
 
 addHandler('proceed_eat_done', (session) => {
     session.title.group.remove();
+    session.title.sound.stop();
+});
+
+addHandler('mousemove', (session) => {
+    if (!session.title.played) {
+        session.title.played = true;
+        session.title.sound.play();
+    }
 });
