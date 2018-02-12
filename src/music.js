@@ -7,9 +7,7 @@ addHandler('load', (session) => {
         loop: true,
     });
     session.music.once('load', () => {
-        if (!document.hidden) {
-            session.music.play();
-        }
+        session.musicState = 'loaded';
     });
 });
 
@@ -20,3 +18,10 @@ addHandler('focus', (session) => {
 addHandler('blur', (session) => {
     session.music.fade(1, 0, 500);
 });
+
+addHandler('mousedown', (session) => {
+    if (session.musicState === 'loaded') {
+        session.music.play();
+        session.musicState = 'played';
+    }
+})
