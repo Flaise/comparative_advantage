@@ -4,6 +4,7 @@ const {amountOf} = require('./inventory');
 
 addHandler('load', (session) => {
     session.cookSound = new Howl({src: ['./assets/cook.ogg', './assets/cook.mp3']});
+    session.eatSound = new Howl({src: ['./assets/eat.ogg', './assets/eat.mp3']});
 });
 
 addHandler('proceed', (session) => {
@@ -19,6 +20,7 @@ addHandler('proceed_eat', (session) => {
     if (foodHeld > 0) {
         const amount = Math.min(foodHeld, session.foodCost);
         session.foodCost -= amount;
+        session.eatSound.play();
         handle(session, 'lose', {type: 'food', amount});
         if (session.foodCost === 0) {
             handle(session, 'proceed_eat_done');
