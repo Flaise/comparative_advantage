@@ -1,5 +1,10 @@
+const {Howl} = require('howler');
 const {addHandler, handle, handleLater} = require('./event');
 const {amountOf} = require('./inventory');
+
+addHandler('load', (session) => {
+    session.cookSound = new Howl({src: ['./assets/cook.ogg', './assets/cook.mp3']});
+});
 
 addHandler('proceed', (session) => {
     session.foodCost = Math.floor(Math.random() * 5) + 1;
@@ -20,6 +25,7 @@ addHandler('proceed_eat', (session) => {
             return;
         }
     } else if (amountOf(session, 'slave') > 0) {
+        session.cookSound.play();
         handle(session, 'lose', {type: 'slave', amount: 1});
         handle(session, 'gain', {type: 'food', amount: 6});
     } else {
