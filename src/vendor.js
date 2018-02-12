@@ -20,7 +20,7 @@ addHandler('load', (session) => {
 })
 
 addHandler('start', (session) => {
-    session.vendorsEnabled = true;
+    session.vendorsEnabled = false;
     session.vendors = [];
     makeVendor(session, 'vendor1', {left: 139, top: 585, right: 243, bottom: 664});
     makeVendor(session, 'vendor2', {left: 268, top: 434, right: 365, bottom: 508});
@@ -108,7 +108,7 @@ function shuffle(array) {
     return array;
 }
 
-addHandler('start proceed_done', (session) => {
+addHandler('proceed_done', (session) => {
     // Can't have same commodity on both sides of the exchange in one town or else free money.
     const types = shuffle(commodityTypes());
     const buys = [];

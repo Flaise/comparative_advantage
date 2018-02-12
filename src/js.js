@@ -9,6 +9,7 @@ require('./inventory');
 require('./commodity');
 require('./eat');
 require('./gameover');
+require('./title');
 
 const Atlas = require('skid/lib/scene/atlas');
 const {handle} = require('./event');

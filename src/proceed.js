@@ -22,6 +22,7 @@ addHandler('start', (session) => {
     avatar.layer = 3;
 
     session.proceed.avatar = avatar;
+    session.proceed.initial = true;
 });
 
 addHandler('proceed_done', (session) => {
@@ -46,6 +47,11 @@ addHandler('mousemove', (session, {x, y}) => {
 addHandler('mousedown', (session, {x, y}) => {
     if (session.proceed.moving) return;
     if (overlapsBounds(x, y, buttonBounds)) {
-        handle(session, 'proceed');
+        if (session.proceed.initial) {
+            session.proceed.initial = false;
+            handle(session, 'proceed_eat_done');
+        } else {
+            handle(session, 'proceed');
+        }
     }
 });
