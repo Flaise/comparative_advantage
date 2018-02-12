@@ -8,12 +8,12 @@ const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 
 const slotPositions = [
-    {left: .29, top: .15, width: .05, height: .05},
-    {left: .37, top: .17, width: .05, height: .05},
-    {left: .43, top: .19, width: .05, height: .05},
-    {left: .55, top: .17, width: .05, height: .05},
-    {left: .61, top: .19, width: .05, height: .05},
-    {left: .42, top: .14, width: .05, height: .05},
+    {left: .25, top: .19, width: .05, height: .05},
+    {left: .32, top: .17, width: .05, height: .05},
+    {left: .33, top: .22, width: .05, height: .05},
+    {left: .39, top: .15, width: .05, height: .05},
+    {left: .40, top: .21, width: .05, height: .05},
+    {left: .48, top: .22, width: .05, height: .05},
 ];
 
 addHandler('start', (session) => {
