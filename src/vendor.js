@@ -1,6 +1,7 @@
 const IconAvatar = require('skid/lib/scene/icon-avatar');
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
+const {Howl} = require('howler');
 const {addHandler, handle, handleLater} = require('./event');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
@@ -17,6 +18,8 @@ addHandler('load', (session) => {
     loadImage(session, 'vendor4');
     loadImage(session, 'vendor5');
     loadImage(session, 'vendor6');
+
+    session.tradeSound = new Howl({src: ['./assets/trade.ogg', './assets/trade.mp3']});
 })
 
 addHandler('start', (session) => {
@@ -58,6 +61,7 @@ addHandler('mousedown', (session, {x, y}) => {
     for (const vendor of session.vendors) {
         if (overlapsBounds(x, y, vendor.bounds)
         && canTrade(session, vendor.sell.type, vendor.buy.type, vendor.buyCount)) {
+            session.tradeSound.play();
             // Save these here because vendor gets rescaled during 'lose' event.
             const {buyCount, sellCount} = vendor;
             handle(session, 'inputconfigure', {type: 'mousedown', enabled: false});
