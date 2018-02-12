@@ -32,3 +32,11 @@ addHandler('mousedown', (session) => {
         session.music.state = 'played';
     }
 });
+
+addHandler('proceed_starve', (session) => {
+    session.music.sound.fade(1, 0, 500);
+});
+
+addHandler('restart', (session) => {
+    session.music.sound.fade(0, 1, 800);
+});

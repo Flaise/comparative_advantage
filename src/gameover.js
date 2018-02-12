@@ -1,14 +1,18 @@
 const Translation = require('skid/lib/scene/translation');
 const TextAvatar = require('skid/lib/scene/text-avatar');
+const {Howl} = require('howler');
 const {addHandler, handleLater, handle} = require('./event');
 
 const RARR = '\u2192';
 
-addHandler('start', (session) => {
-    session.gameover = {};
+addHandler('load', (session) => {
+    const sound = new Howl({src: ['./assets/game_over.ogg', './assets/game_over.mp3']});
+    session.gameover = {sound};
 });
 
 addHandler('proceed_starve', (session) => {
+    session.gameover.sound.play();
+
     const position = new Translation(session.scene.ui);
     position.x.setTo(.5);
     position.y.setTo(.75 / 2);

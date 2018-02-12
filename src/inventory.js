@@ -11,9 +11,9 @@ const slotPositions = [
     {left: .25, top: .19, width: .05, height: .05},
     {left: .32, top: .17, width: .05, height: .05},
     {left: .33, top: .22, width: .05, height: .05},
-    {left: .39, top: .15, width: .05, height: .05},
     {left: .40, top: .21, width: .05, height: .05},
-    {left: .48, top: .22, width: .05, height: .05},
+    {left: .48, top: .20, width: .05, height: .05},
+    {left: .39, top: .15, width: .05, height: .05},
 ];
 
 addHandler('start', (session) => {
