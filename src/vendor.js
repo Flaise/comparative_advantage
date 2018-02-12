@@ -25,12 +25,12 @@ addHandler('load', (session) => {
 addHandler('start', (session) => {
     session.vendorsEnabled = false;
     session.vendors = [];
-    makeVendor(session, 'vendor1', {left: 139, top: 585, right: 243, bottom: 664});
-    makeVendor(session, 'vendor2', {left: 268, top: 434, right: 365, bottom: 508});
-    makeVendor(session, 'vendor3', {left: 626, top: 425, right: 718, bottom: 503});
-    makeVendor(session, 'vendor4', {left: 792, top: 601, right: 907, bottom: 701});
-    makeVendor(session, 'vendor5', {left: 420, top: 582, right: 524, bottom: 651});
-    makeVendor(session, 'vendor6', {left: 790, top: 450, right: 900, bottom: 530});
+    makeVendor(session, 'vendor1', {left: 55, top: 515, right: 270, bottom: 677});
+    makeVendor(session, 'vendor2', {left: 163, top: 319, right: 382, bottom: 513});
+    makeVendor(session, 'vendor3', {left: 582, top: 295, right: 758, bottom: 514});
+    makeVendor(session, 'vendor4', {left: 760, top: 540, right: 986, bottom: 724});
+    makeVendor(session, 'vendor5', {left: 393, top: 489, right: 625, bottom: 679});
+    makeVendor(session, 'vendor6', {left: 765, top: 338, right: 990, bottom: 540});
 });
 
 addHandler('proceed', (session) => {
@@ -86,13 +86,17 @@ function makeVendor(session, baseName, bounds) {
     avatar.layer = 3;
 
     const textPosition = new Translation(session.scene.world);
-    textPosition.x.setTo((bounds.right + bounds.left) / 2.0 / 1000.0);
+    let x = (bounds.right + bounds.left) / 2.0 / 1000.0;
+    if (x > .83) x = .83;
+    textPosition.x.setTo(x);
     textPosition.y.setTo(bounds.top / 1000.0);
 
     const text = new TextAvatar(textPosition, session.scene.camera);
     text.textAlign = 'center';
     text.textBaseline = 'bottom';
     text.fillStyle = 'white';
+    text.strokeStyle = '#444';
+    text.lineWidth = 4;
     text.font = '24px verdana';
     text.layer = 4;
 
@@ -199,6 +203,7 @@ function updateVendorTextColor(session) {
     if (!session.vendorsEnabled) {
         for (const vendor of session.vendors) {
             vendor.text.fillStyle = 'transparent';
+            vendor.text.strokeStyle = 'transparent';
             vendor.text.changed();
         }
         return;
@@ -206,6 +211,7 @@ function updateVendorTextColor(session) {
     if (!inputEnabled(session, 'mousedown')) {
         for (const vendor of session.vendors) {
             vendor.text.fillStyle = '#aaa';
+            vendor.text.strokeStyle = '#444';
             vendor.text.changed();
         }
         return;
@@ -216,6 +222,7 @@ function updateVendorTextColor(session) {
         } else {
             vendor.text.fillStyle = '#ccc';
         }
+        vendor.text.strokeStyle = '#444';
         vendor.text.changed();
     }
 }
