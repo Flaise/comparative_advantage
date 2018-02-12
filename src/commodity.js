@@ -32,7 +32,7 @@ addHandler('load', (session) => {
         name: 'Cutlads', icon: iconOf(session, 'cutlad', '0_0_50'), fmv: 6, singular: 'Cutlad',
     };
     commodities['slave'] = {
-        name: 'Slaves', icon: iconOf(session, 'slave', '0_0_50'), fmv: 8, singular: 'Slave',
+        name: 'Slaves', icon: iconOf(session, 'slave', '25_25_50'), fmv: 8, singular: 'Slave',
     };
     commodities['tulip'] = {
         name: 'Tulips', icon: iconOf(session, 'tulip', '0_0_50'), fmv: 4, singular: 'Tulip',
