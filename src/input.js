@@ -7,6 +7,14 @@ addHandler('start', (session) => {
 
     window.addEventListener('focus', () => handle(session, 'focus'));
     window.addEventListener('blur', () => handle(session, 'blur'));
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            handle(session, 'pagevisible', false);
+        } else {
+            handle(session, 'pagevisible', true);
+        }
+    });
 });
 
 function mouseXY(event) {
