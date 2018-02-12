@@ -4,6 +4,9 @@ addHandler('start', (session) => {
     session.events = {};
     startMouseEvent(session, 'mousemove');
     startMouseEvent(session, 'mousedown');
+
+    window.addEventListener('focus', () => handle(session, 'focus'));
+    window.addEventListener('blur', () => handle(session, 'blur'));
 });
 
 function mouseXY(event) {
