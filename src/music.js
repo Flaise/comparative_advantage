@@ -1,8 +1,5 @@
 const {Howl} = require('howler');
 const {addHandler} = require('./event');
-const {overlapsBounds} = require('./bounds');
-
-const muteBounds = {left: 0, top: 0, right: 50, bottom: 50};
 
 addHandler('load', (session) => {
     const sound = new Howl({
@@ -12,7 +9,7 @@ addHandler('load', (session) => {
             loop: [4545, 99004, true], // 103549 = entire track
         },
     });
-    session.music = {sound, muted: false};
+    session.music = {sound, state: 'loading'};
     sound.once('load', () => {
         session.music.state = 'loaded';
     });
@@ -22,7 +19,6 @@ addHandler('load', (session) => {
 });
 
 addHandler('pagevisible', (session, visible) => {
-    if (session.music.muted) return;
     if (visible) {
         session.music.sound.fade(0, 1, 800);
     } else {
@@ -30,18 +26,9 @@ addHandler('pagevisible', (session, visible) => {
     }
 });
 
-addHandler('mousedown', (session, {x, y}) => {
+addHandler('mousedown', (session) => {
     if (session.music.state === 'loaded') {
         session.music.sound.play('first');
         session.music.state = 'played';
-    }
-
-    if (overlapsBounds(x, y, muteBounds)) {
-        session.music.muted = !session.music.muted;
-        if (session.music.muted) {
-            session.music.sound.fade(1, 0, 500);
-        } else {
-            session.music.sound.fade(0, 1, 800);
-        }
     }
 });

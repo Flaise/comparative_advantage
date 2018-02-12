@@ -11,6 +11,7 @@ require('./eat');
 require('./gameover');
 require('./title');
 require('./music');
+require('./mute');
 
 const Atlas = require('skid/lib/scene/atlas');
 const {handle} = require('./event');
