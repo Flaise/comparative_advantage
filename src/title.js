@@ -14,66 +14,66 @@ addHandler('start', (session) => {
     text.text = 'Comparative Advantage';
     text.textAlign = 'center';
     text.textBaseline = 'bottom';
-    text.fillStyle = '#ffd';
-    text.strokeStyle = 'black';
+    text.fillStyle = '#dfdfef';
+    text.strokeStyle = '#444';
     text.lineWidth = 4;
-    text.font = '57px verdana';
+    text.font = '73px verdana';
     text.layer = 9;
 
     position = new Translation(group);
     position.x.setTo(.38);
-    position.y.setTo(.5);
+    position.y.setTo(.52);
 
     text = new TextAvatar(position, session.scene.camera);
     text.text = 'Design and programming by Flaise';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
-    text.fillStyle = '#ffd';
-    text.strokeStyle = 'black';
-    text.lineWidth = 4;
-    text.font = '22px verdana';
+    text.fillStyle = '#ffe';
+    text.strokeStyle = '#484848';
+    text.lineWidth = 3.5;
+    text.font = '26px verdana';
     text.layer = 9;
 
     position = new Translation(group);
     position.x.setTo(.38);
-    position.y.setTo(.54);
+    position.y.setTo(.56);
 
     text = new TextAvatar(position, session.scene.camera);
-    text.text = 'Graphics by __';
+    text.text = 'Graphics by Joy Hua';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
-    text.fillStyle = '#ffd';
-    text.strokeStyle = 'black';
-    text.lineWidth = 4;
-    text.font = '22px verdana';
+    text.fillStyle = '#ffe';
+    text.strokeStyle = '#555';
+    text.lineWidth = 3.5;
+    text.font = '24px verdana';
     text.layer = 9;
 
     position = new Translation(group);
-    position.x.setTo(.52);
-    position.y.setTo(.58);
+    position.x.setTo(.532);
+    position.y.setTo(.6);
 
     text = new TextAvatar(position, session.scene.camera);
     text.text = 'Tristion Edison';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
-    text.fillStyle = '#ffd';
-    text.strokeStyle = 'black';
-    text.lineWidth = 4;
-    text.font = '22px verdana';
+    text.fillStyle = '#ffe';
+    text.strokeStyle = '#555';
+    text.lineWidth = 3.5;
+    text.font = '24px verdana';
     text.layer = 9;
 
     position = new Translation(group);
     position.x.setTo(.38);
-    position.y.setTo(.62);
+    position.y.setTo(.64);
 
     text = new TextAvatar(position, session.scene.camera);
     text.text = 'Audio by Lauren X. Pham';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
-    text.fillStyle = '#ffd';
-    text.strokeStyle = 'black';
-    text.lineWidth = 4;
-    text.font = '22px verdana';
+    text.fillStyle = '#ffe';
+    text.strokeStyle = '#555';
+    text.lineWidth = 3.5;
+    text.font = '24px verdana';
     text.layer = 9;
 
     session.title = {group};
