@@ -9,7 +9,7 @@ const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
 const {canTrade, amountOf} = require('./inventory');
 const {inputEnabled} = require('./input');
-const {loadAudio} = require('./audio');
+const {loadAudio2} = require('./audio');
 
 const RARR = '\u2192';
 
@@ -21,8 +21,7 @@ addHandler('load', (session) => {
     loadImage(session, 'vendor4');
     loadImage(session, 'vendor5');
     loadImage(session, 'vendor6');
-
-    session.tradeSound = loadAudio(session, {src: ['./assets/trade.ogg', './assets/trade.mp3']});
+    loadAudio2(session, 'trade', {src: ['./assets/trade.ogg', './assets/trade.mp3']});
 })
 
 addHandler('start', (session) => {
@@ -73,7 +72,6 @@ addHandler('mousedown', (session, {x, y}) => {
     for (const vendor of session.vendors) {
         if (overlapsBounds(x, y, vendor.bounds)
         && canTrade(session, vendor.sell.type, vendor.buy.type, vendor.buyCount)) {
-            session.tradeSound.play();
             // Save these here because vendor gets rescaled during 'lose' event.
             const {buyCount, sellCount} = vendor;
             handle(session, 'trade');

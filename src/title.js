@@ -1,15 +1,12 @@
 const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {Group} = require('skid/lib/scene/group');
-const {addHandler} = require('skid/lib/event');
-const {loadAudio} = require('./audio');
+const {addHandler, handle} = require('skid/lib/event');
+const {loadAudio2} = require('./audio');
 
 addHandler('load', (session) => {
-    const sound = loadAudio(session, {
-        src: ['./assets/menu.ogg', './assets/menu.mp3'],
-        loop: true,
-    });
-    session.title = {sound, played: false};
+    loadAudio2(session, 'title', {src: ['./assets/menu.ogg', './assets/menu.mp3'], loop: true});
+    session.title = {played: false};
 });
 
 addHandler('start', (session) => {
@@ -90,12 +87,12 @@ addHandler('start', (session) => {
 
 addHandler('proceed_eat_done', (session) => {
     session.title.group.remove();
-    session.title.sound.stop();
+    handle(session, 'title_stop');
 });
 
 addHandler('mousemove', (session) => {
     if (!session.title.played) {
         session.title.played = true;
-        session.title.sound.play();
+        handle(session, 'title');
     }
 });

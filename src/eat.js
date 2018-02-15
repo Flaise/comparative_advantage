@@ -1,11 +1,11 @@
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
 const {amountOf} = require('./inventory');
-const {loadAudio} = require('./audio');
+const {loadAudio2} = require('./audio');
 
 addHandler('load', (session) => {
-    session.cookSound = loadAudio(session, {src: ['./assets/cook.ogg', './assets/cook.mp3']});
-    session.eatSound = loadAudio(session, {src: ['./assets/eat.ogg', './assets/eat.mp3']});
+    loadAudio2(session, 'cook', {src: ['./assets/cook.ogg', './assets/cook.mp3']});
+    loadAudio2(session, 'eat', {src: ['./assets/eat.ogg', './assets/eat.mp3']});
 });
 
 addHandler('proceed', (session) => {
@@ -21,14 +21,14 @@ addHandler('proceed_eat', (session) => {
     if (foodHeld > 0) {
         const amount = Math.min(foodHeld, session.foodCost);
         session.foodCost -= amount;
-        session.eatSound.play();
+        handle(session, 'eat');
         handle(session, 'lose', {type: 'food', amount});
         if (session.foodCost === 0) {
             handle(session, 'proceed_eat_done');
             return;
         }
     } else if (amountOf(session, 'slave') > 0) {
-        session.cookSound.play();
+        handle(session, 'cook');
         handle(session, 'lose', {type: 'slave', amount: 1});
         handle(session, 'gain', {type: 'food', amount: 6});
     } else {

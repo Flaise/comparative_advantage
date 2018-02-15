@@ -17,6 +17,7 @@ require('./mute');
 
 window.addEventListener('load', () => {
     const state = Object.create(null);
+    state.debug = true;
     window.getState = () => state; // NOTE: For debugging introspection.
     load(state);
 });
