@@ -1,9 +1,9 @@
-const {Howler} = require('howler');
 const {IconAvatar} = require('skid/lib/scene/icon-avatar');
 const {Translation} = require('skid/lib/scene/translation');
 const {addHandler} = require('skid/lib/event');
 const {loadIcon} = require('skid/lib/load');
 const {overlapsBounds} = require('./bounds');
+const {muted, setMuted} = require('./audio');
 
 const muteBounds = {left: 0, top: 0, right: 75, bottom: 75};
 
@@ -26,8 +26,8 @@ addHandler('start', (session) => {
 
 addHandler('mousedown', (session, {x, y}) => {
     if (overlapsBounds(x, y, muteBounds)) {
-        const muted = !Howler._muted;
-        Howler.mute(muted);
+        const muted = !muted();
+        setMuted(muted);
         if (muted) {
             session.mute.avatar.icon = session.mute.iconMute;
         } else {

@@ -1,11 +1,11 @@
 const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {Group} = require('skid/lib/scene/group');
-const {Howl} = require('howler');
 const {addHandler} = require('skid/lib/event');
+const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    const sound = new Howl({
+    const sound = loadAudio(session, {
         src: ['./assets/menu.ogg', './assets/menu.mp3'],
         loop: true,
     });

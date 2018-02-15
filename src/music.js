@@ -1,8 +1,8 @@
-const {Howl} = require('howler');
 const {addHandler} = require('skid/lib/event');
+const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    const sound = new Howl({
+    const sound = loadAudio(session, {
         src: ['./assets/music.ogg', './assets/music.mp3'],
         sprite: {
             first: [0, 4545],
@@ -18,12 +18,12 @@ addHandler('load', (session) => {
     });
 });
 
-addHandler('pagevisible', (session, visible) => {
-    if (visible) {
-        session.music.sound.fade(0, 1, 800);
-    } else {
-        session.music.sound.fade(1, 0, 500);
-    }
+addHandler('pagehide', (session) => {
+    session.music.sound.fade(1, 0, 500);
+});
+
+addHandler('pageshow', (session) => {
+    session.music.sound.fade(0, 1, 800);
 });
 
 addHandler('mousemove', (session) => {

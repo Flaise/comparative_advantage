@@ -1,11 +1,11 @@
-const {Howl} = require('howler');
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
 const {amountOf} = require('./inventory');
+const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    session.cookSound = new Howl({src: ['./assets/cook.ogg', './assets/cook.mp3']});
-    session.eatSound = new Howl({src: ['./assets/eat.ogg', './assets/eat.mp3']});
+    session.cookSound = loadAudio(session, {src: ['./assets/cook.ogg', './assets/cook.mp3']});
+    session.eatSound = loadAudio(session, {src: ['./assets/eat.ogg', './assets/eat.mp3']});
 });
 
 addHandler('proceed', (session) => {

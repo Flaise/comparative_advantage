@@ -4,12 +4,12 @@ const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
 const {loadIcon} = require('skid/lib/load');
-const {Howl} = require('howler');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
 const {canTrade, amountOf} = require('./inventory');
 const {inputEnabled} = require('./input');
+const {loadAudio} = require('./audio');
 
 const RARR = '\u2192';
 
@@ -22,10 +22,11 @@ addHandler('load', (session) => {
     loadImage(session, 'vendor5');
     loadImage(session, 'vendor6');
 
-    session.tradeSound = new Howl({src: ['./assets/trade.ogg', './assets/trade.mp3']});
+    session.tradeSound = loadAudio(session, {src: ['./assets/trade.ogg', './assets/trade.mp3']});
 })
 
 addHandler('start', (session) => {
+    session.vendorTrading = false;
     session.vendorsEnabled = false;
     session.vendors = [];
     makeVendor(session, 'vendor1', {left: 55, top: 515, right: 270, bottom: 677});
@@ -59,6 +60,14 @@ addHandler('mousemove', (session, {x, y}) => {
     }
 });
 
+addHandler('trade', (session) => {
+    session.vendorTrading = true;
+});
+
+addHandler('trade_done', (session) => {
+    session.vendorTrading = false;
+});
+
 addHandler('mousedown', (session, {x, y}) => {
     if (!session.vendorsEnabled) return;
     for (const vendor of session.vendors) {
@@ -67,10 +76,10 @@ addHandler('mousedown', (session, {x, y}) => {
             session.tradeSound.play();
             // Save these here because vendor gets rescaled during 'lose' event.
             const {buyCount, sellCount} = vendor;
-            handle(session, 'inputconfigure', {type: 'mousedown', enabled: false});
+            handle(session, 'trade');
             handle(session, 'lose', {type: vendor.buy.type, amount: buyCount});
             handleLater(session, 200, 'gain', {type: vendor.sell.type, amount: sellCount});
-            handleLater(session, 450, 'inputconfigure', {type: 'mousedown', enabled: true});
+            handleLater(session, 450, 'trade_done');
             return;
         }
     }
@@ -210,7 +219,7 @@ function updateVendorTextColor(session) {
         }
         return;
     }
-    if (!inputEnabled(session, 'mousedown')) {
+    if (session.vendorTrading) {
         for (const vendor of session.vendors) {
             vendor.text.fillStyle = '#aaa';
             vendor.text.strokeStyle = '#444';
@@ -229,7 +238,7 @@ function updateVendorTextColor(session) {
     }
 }
 
-addHandler('start proceed_done gain lose inputconfigure proceed', (session) => {
+addHandler('start proceed_done gain lose trade_done proceed', (session) => {
     updateVendorTextColor(session);
 });
 

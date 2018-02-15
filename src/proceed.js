@@ -44,7 +44,7 @@ addHandler('mousemove', (session, {x, y}) => {
 });
 
 addHandler('mousedown', (session, {x, y}) => {
-    if (session.proceed.moving) return;
+    if (session.proceed.moving || session.vendorTrading) return;
     if (overlapsBounds(x, y, buttonBounds)) {
         if (session.proceed.initial) {
             session.proceed.initial = false;

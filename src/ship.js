@@ -1,10 +1,10 @@
-const {Howl} = require('howler');
 const {IconAvatar} = require('skid/lib/scene/icon-avatar');
 const {addHandler} = require('skid/lib/event');
 const {loadIcon} = require('skid/lib/load');
+const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    session.sailSound = new Howl({
+    session.sailSound = loadAudio(session, {
         src: ['./assets/sail.ogg', './assets/sail.mp3'],
         loop: true,
     });
