@@ -26,9 +26,9 @@ addHandler('start', (session) => {
 
 addHandler('mousedown', (session, {x, y}) => {
     if (overlapsBounds(x, y, muteBounds)) {
-        const muted = !muted();
-        setMuted(muted);
-        if (muted) {
+        const m = !muted();
+        setMuted(m);
+        if (m) {
             session.mute.avatar.icon = session.mute.iconMute;
         } else {
             session.mute.avatar.icon = session.mute.iconSound;
