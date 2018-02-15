@@ -1,6 +1,7 @@
-const IconAvatar = require('skid/lib/scene/icon-avatar');
 const {Howl} = require('howler');
-const {addHandler} = require('./event');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {addHandler} = require('skid/lib/event');
+const {loadIcon} = require('skid/lib/load');
 
 addHandler('load', (session) => {
     session.sailSound = new Howl({
@@ -10,13 +11,12 @@ addHandler('load', (session) => {
     session.sailSound.on('fade', () => {
         session.sailSound.stop();
         session.sailSound.volume(1);
-    })
+    });
+    session.shipIcon = loadIcon(session, `./assets/ship1.png`, 0, 0, 1000);
 });
 
 addHandler('start', (session) => {
-    const icon = session.atlas.get('ship1');
-    icon.loadImage('./assets/ship1.png', 'ship1_0_0_1000');
-    const avatar = new IconAvatar(session.scene.world, icon, 0, 0, 1, 1);
+    const avatar = new IconAvatar(session.scene.world, session.shipIcon, 0, 0, 1, 1);
     avatar.layer = 1.5;
 });
 

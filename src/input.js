@@ -1,4 +1,4 @@
-const {addHandler, handle} = require('./event');
+const {addHandler, handle} = require('skid/lib/event');
 
 addHandler('start', (session) => {
     session.events = {};

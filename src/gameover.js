@@ -1,7 +1,8 @@
-const Translation = require('skid/lib/scene/translation');
-const TextAvatar = require('skid/lib/scene/text-avatar');
+const {Translation} = require('skid/lib/scene/translation');
+const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {Howl} = require('howler');
-const {addHandler, handleLater, handle} = require('./event');
+const {addHandler, handle} = require('skid/lib/event');
+const {handleLater} = require('skid/lib/timer');
 
 const RARR = '\u2192';
 

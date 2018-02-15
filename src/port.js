@@ -1,11 +1,12 @@
-const IconAvatar = require('skid/lib/scene/icon-avatar');
-const Translation = require('skid/lib/scene/translation');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {Translation} = require('skid/lib/scene/translation');
 const {reverseSine, sine} = require('skid/lib/tween');
-const {addHandler, handleLater} = require('./event');
+const {addHandler,} = require('skid/lib/event');
+const {handleLater} = require('skid/lib/timer');
+const {loadIcon} = require('skid/lib/load');
 
 addHandler('load', (session) => {
-    const icon = session.atlas.get('port1');
-    icon.loadImage('./assets/port1.png', 'port1_0_0_1000');
+    const icon = loadIcon(session, `./assets/port1.png`, 0, 0, 1000);
     session.port = {icon};
 });
 

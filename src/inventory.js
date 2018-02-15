@@ -1,8 +1,8 @@
-const IconAvatar = require('skid/lib/scene/icon-avatar');
-const Translation = require('skid/lib/scene/translation');
-const TextAvatar = require('skid/lib/scene/text-avatar');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {Translation} = require('skid/lib/scene/translation');
+const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {linear} = require('skid/lib/tween');
-const {addHandler, handle} = require('./event');
+const {addHandler, handle} = require('skid/lib/event');
 const {commodityOfType, commodityDisplay} = require('./commodity');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');

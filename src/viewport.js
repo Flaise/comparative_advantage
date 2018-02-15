@@ -1,9 +1,9 @@
-const Viewport = require('skid/lib/scene/viewport');
-const ClearAll = require('skid/lib/scene/clear-all');
-const Smoothing = require('skid/lib/scene/smoothing');
-const Camera = require('skid/lib/scene/camera');
-const Group = require('skid/lib/scene/group');
-const {addHandler} = require('./event');
+const {Viewport} = require('skid/lib/scene/viewport');
+const {ClearAll} = require('skid/lib/scene/clear-all');
+const {Smoothing} = require('skid/lib/scene/smoothing');
+const {Camera} = require('skid/lib/scene/camera');
+const {Group} = require('skid/lib/scene/group');
+const {addHandler} = require('skid/lib/event');
 
 addHandler('start', (session) => {
     const renderer = new Viewport();

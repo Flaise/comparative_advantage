@@ -1,5 +1,6 @@
 const {Howl} = require('howler');
-const {addHandler, handle, handleLater} = require('./event');
+const {addHandler, handle} = require('skid/lib/event');
+const {handleLater} = require('skid/lib/timer');
 const {amountOf} = require('./inventory');
 
 addHandler('load', (session) => {

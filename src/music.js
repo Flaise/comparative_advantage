@@ -1,5 +1,5 @@
 const {Howl} = require('howler');
-const {addHandler} = require('./event');
+const {addHandler} = require('skid/lib/event');
 
 addHandler('load', (session) => {
     const sound = new Howl({

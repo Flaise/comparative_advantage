@@ -1,8 +1,10 @@
-const IconAvatar = require('skid/lib/scene/icon-avatar');
-const Translation = require('skid/lib/scene/translation');
-const TextAvatar = require('skid/lib/scene/text-avatar');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {Translation} = require('skid/lib/scene/translation');
+const {TextAvatar} = require('skid/lib/scene/text-avatar');
+const {addHandler, handle} = require('skid/lib/event');
+const {handleLater} = require('skid/lib/timer');
+const {loadIcon} = require('skid/lib/load');
 const {Howl} = require('howler');
-const {addHandler, handle, handleLater} = require('./event');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
@@ -12,6 +14,7 @@ const {inputEnabled} = require('./input');
 const RARR = '\u2192';
 
 addHandler('load', (session) => {
+    session.vendorIcons = {};
     loadImage(session, 'vendor1');
     loadImage(session, 'vendor2');
     loadImage(session, 'vendor3');
@@ -74,15 +77,14 @@ addHandler('mousedown', (session, {x, y}) => {
 });
 
 function loadImage(session, baseName) {
-    const icon = session.atlas.get(baseName);
-    icon.loadImage(`./assets/${baseName}.png`, `${baseName}_0_0_1000`);
+    session.vendorIcons[baseName] = loadIcon(session, `./assets/${baseName}.png`, 0, 0, 1000);
 }
 
 function makeVendor(session, baseName, bounds) {
     const visibility = new Visibility(session.scene.world);
     visibility.visible = false;
 
-    const avatar = new IconAvatar(visibility, session.atlas.get(baseName), 0, 0, 1, 1);
+    const avatar = new IconAvatar(visibility, session.vendorIcons[baseName], 0, 0, 1, 1);
     avatar.layer = 3;
 
     const textPosition = new Translation(session.scene.world);

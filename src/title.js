@@ -1,8 +1,8 @@
-const Translation = require('skid/lib/scene/translation');
-const TextAvatar = require('skid/lib/scene/text-avatar');
-const Group = require('skid/lib/scene/group');
+const {Translation} = require('skid/lib/scene/translation');
+const {TextAvatar} = require('skid/lib/scene/text-avatar');
+const {Group} = require('skid/lib/scene/group');
 const {Howl} = require('howler');
-const {addHandler} = require('./event');
+const {addHandler} = require('skid/lib/event');
 
 addHandler('load', (session) => {
     const sound = new Howl({

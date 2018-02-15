@@ -1,41 +1,40 @@
-const {addHandler} = require('./event');
+const {addHandler} = require('skid/lib/event');
+const {loadIcon} = require('skid/lib/load');
 
 const commodities = Object.create(null);
 
-function iconOf(session, iconName, stats) {
-    const icon = session.atlas.get(iconName);
-    icon.loadImage(`./assets/${iconName}.png`, `${iconName}_${stats}`);
-    return icon;
+function iconOf(session, iconName, ax, ay, diameter) {
+    return loadIcon(session, `./assets/${iconName}.png`, ax, ay, diameter);
 }
 
 addHandler('load', (session) => {
     commodities['food'] = {
-        name: 'Food', icon: iconOf(session, 'food', '0_0_50'), fmv: .5, singular: 'Food',
+        name: 'Food', icon: iconOf(session, 'food', 0, 0, 50), fmv: .5, singular: 'Food',
     };
     commodities['gold'] = {
-        name: 'Gold', icon: iconOf(session, 'gold', '0_0_50'), fmv: 20, singular: 'Gold',
+        name: 'Gold', icon: iconOf(session, 'gold', 0, 0, 50), fmv: 20, singular: 'Gold',
     };
     commodities['silver'] = {
-        name: 'Silver', icon: iconOf(session, 'silver', '0_0_50'), fmv: 1, singular: 'Silver',
+        name: 'Silver', icon: iconOf(session, 'silver', 0, 0, 50), fmv: 1, singular: 'Silver',
     };
     commodities['sugar'] = {
-        name: 'Sugar', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .4, singular: 'Sugar',
+        name: 'Sugar', icon: iconOf(session, 'sugar', 0, 0, 50), fmv: .4, singular: 'Sugar',
     };
     commodities['cocaine'] = {
-        name: 'Cocaines', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .6, singular: 'Cocaine',
+        name: 'Cocaines', icon: iconOf(session, 'sugar', 0, 0, 50), fmv: .6, singular: 'Cocaine',
     };
-    // commodities['salt'] = {name: 'Salt', icon: iconOf(session, 'sugar', '0_0_50'), fmv: .6};
+    // commodities['salt'] = {name: 'Salt', icon: iconOf(session, 'sugar', 0, 0, 50), fmv: .6};
     commodities['cutlass'] = {
-        name: 'Cutlasses', icon: iconOf(session, 'cutlass', '0_0_50'), fmv: 5, singular: 'Cutlass',
+        name: 'Cutlasses', icon: iconOf(session, 'cutlass', 0, 0, 50), fmv: 5, singular: 'Cutlass',
     };
     commodities['cutlad'] = {
-        name: 'Cutlads', icon: iconOf(session, 'cutlad', '0_0_50'), fmv: 6, singular: 'Cutlad',
+        name: 'Cutlads', icon: iconOf(session, 'cutlad', 0, 0, 50), fmv: 6, singular: 'Cutlad',
     };
     commodities['slave'] = {
-        name: 'Slaves', icon: iconOf(session, 'slave', '25_25_50'), fmv: 8, singular: 'Slave',
+        name: 'Slaves', icon: iconOf(session, 'slave', 25, 25, 50), fmv: 8, singular: 'Slave',
     };
     commodities['tulip'] = {
-        name: 'Tulips', icon: iconOf(session, 'tulip', '0_0_50'), fmv: 4, singular: 'Tulip',
+        name: 'Tulips', icon: iconOf(session, 'tulip', 0, 0, 50), fmv: 4, singular: 'Tulip',
     };
 
     for (const type of Object.keys(commodities)) {

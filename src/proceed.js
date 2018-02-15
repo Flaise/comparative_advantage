@@ -1,15 +1,14 @@
-const IconAvatar = require('skid/lib/scene/icon-avatar');
-const Translation = require('skid/lib/scene/translation');
-const {addHandler, handle} = require('./event');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {Translation} = require('skid/lib/scene/translation');
+const {addHandler, handle} = require('skid/lib/event');
+const {loadIcon} = require('skid/lib/load');
 const {overlapsBounds} = require('./bounds');
 
 const buttonBounds = {left: 880, top: 23, right: 977, bottom: 112};
 
 addHandler('load', (session) => {
-    const iconNormal = session.atlas.get('proceed');
-    iconNormal.loadImage(`./assets/proceed.png`, `proceed_0_0_75`);
-    const iconHighlight = session.atlas.get('proceedhighlight');
-    iconHighlight.loadImage(`./assets/proceedhighlight.png`, `proceedhighlight_0_0_75`);
+    const iconNormal = loadIcon(session, `./assets/proceed.png`, 0, 0, 75);
+    const iconHighlight = loadIcon(session, `./assets/proceedhighlight.png`, 0, 0, 75);
     session.proceed = {iconNormal, iconHighlight};
 });
 
@@ -36,7 +35,7 @@ addHandler('proceed', (session) => {
 });
 
 addHandler('mousemove', (session, {x, y}) => {
-    if (session.proceed.moving) return;
+    if (session.proceed.moving || !session.proceed.avatar) return;
     if (overlapsBounds(x, y, buttonBounds)) {
         session.proceed.avatar.icon = session.proceed.iconHighlight;
     } else {

@@ -1,3 +1,5 @@
+const {load} = require('skid/lib/load');
+const {addHandler, handle} = require('skid/lib/event');
 require('./viewport');
 require('./water');
 require('./port');
@@ -13,13 +15,10 @@ require('./title');
 require('./music');
 require('./mute');
 
-const Atlas = require('skid/lib/scene/atlas');
-const {handle} = require('./event');
-
 window.addEventListener('load', () => {
-    const session = Object.create(null);
-    window.getSession = () => session; // NOTE: For debugging introspection.
-    session.atlas = new Atlas();
-    handle(session, 'load');
-    handle(session, 'start');
+    const state = Object.create(null);
+    window.getState = () => state; // NOTE: For debugging introspection.
+    load(state);
 });
+
+addHandler('load_done', (state) => handle(state, 'start'));

@@ -1,4 +1,4 @@
-const Group = require('skid/lib/scene/group');
+const {Group} = require('skid/lib/scene/group');
 
 exports.Visibility = class Visibility extends Group {
     constructor(group) {

@@ -1,16 +1,15 @@
 const {Howler} = require('howler');
-const IconAvatar = require('skid/lib/scene/icon-avatar');
-const Translation = require('skid/lib/scene/translation');
-const {addHandler} = require('./event');
+const {IconAvatar} = require('skid/lib/scene/icon-avatar');
+const {Translation} = require('skid/lib/scene/translation');
+const {addHandler} = require('skid/lib/event');
+const {loadIcon} = require('skid/lib/load');
 const {overlapsBounds} = require('./bounds');
 
 const muteBounds = {left: 0, top: 0, right: 75, bottom: 75};
 
 addHandler('load', (session) => {
-    const iconSound = session.atlas.get('sound');
-    iconSound.loadImage(`./assets/sound.png`, `sound_0_0_75`);
-    const iconMute = session.atlas.get('mute');
-    iconMute.loadImage(`./assets/mute.png`, `mute_0_0_75`);
+    const iconSound = loadIcon(session, `./assets/sound.png`, 0, 0, 75);
+    const iconMute = loadIcon(session, `./assets/mute.png`, 0, 0, 75);
     session.mute = {iconSound, iconMute};
 });
 
