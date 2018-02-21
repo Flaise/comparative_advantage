@@ -1,7 +1,7 @@
 const {IconAvatar} = require('skid/lib/scene/icon-avatar');
 const {Translation} = require('skid/lib/scene/translation');
 const {addHandler, handle} = require('skid/lib/event');
-const {loadIcon} = require('skid/lib/load');
+const {loadIcon} = require('skid/lib/scene/icon');
 const {overlapsBounds} = require('./bounds');
 
 const buttonBounds = {left: 880, top: 23, right: 977, bottom: 112};
@@ -12,7 +12,7 @@ addHandler('load', (session) => {
     session.proceed = {iconNormal, iconHighlight};
 });
 
-addHandler('start', (session) => {
+addHandler('load_done', (session) => {
     const position = new Translation(session.scene.world);
     position.x.setTo(.88);
     position.y.setTo(.02);

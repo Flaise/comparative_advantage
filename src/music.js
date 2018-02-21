@@ -1,5 +1,5 @@
 const {addHandler} = require('skid/lib/event');
-const {loadAudio} = require('./audio');
+const {loadAudio} = require('skid/lib/audio');
 
 addHandler('load', (session) => {
     loadAudio(session, 'music', {

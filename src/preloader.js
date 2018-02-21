@@ -1,7 +1,8 @@
 const {PieAvatar} = require('skid/lib/scene/pie-avatar');
 const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
-const {addHandler} = require('skid/lib/event');
+const {load} = require('skid/lib/load');
+const {addHandler, handle} = require('skid/lib/event');
 
 addHandler('load', (state) => {
     const meter = new PieAvatar(state.scene.ui);

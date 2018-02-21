@@ -1,7 +1,7 @@
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
+const {loadAudio} = require('skid/lib/audio');
 const {amountOf} = require('./inventory');
-const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
     loadAudio(session, 'cook', {src: ['./assets/cook.ogg', './assets/cook.mp3']});

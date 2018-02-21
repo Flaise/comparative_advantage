@@ -3,14 +3,14 @@ const {Translation} = require('skid/lib/scene/translation');
 const {reverseSine, sine} = require('skid/lib/tween');
 const {addHandler,} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
-const {loadIcon} = require('skid/lib/load');
+const {loadIcon} = require('skid/lib/scene/icon');
 
 addHandler('load', (session) => {
     const icon = loadIcon(session, `./assets/port1.png`, 0, 0, 1000);
     session.port = {icon};
 });
 
-addHandler('start', (session) => {
+addHandler('load_done', (session) => {
     const position = new Translation(session.scene.world);
     position.x.setTo(2);
     const avatar = new IconAvatar(position, session.port.icon, 0, 0, 1, 1);

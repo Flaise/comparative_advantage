@@ -1,5 +1,5 @@
 const {addHandler} = require('skid/lib/event');
-const {loadIcon} = require('skid/lib/load');
+const {loadIcon} = require('skid/lib/scene/icon');
 
 const commodities = Object.create(null);
 

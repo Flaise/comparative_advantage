@@ -2,7 +2,7 @@ const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
-const {loadAudio} = require('./audio');
+const {loadAudio} = require('skid/lib/audio');
 
 const RARR = '\u2192';
 

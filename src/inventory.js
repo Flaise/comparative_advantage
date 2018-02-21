@@ -16,14 +16,14 @@ const slotPositions = [
     {left: .39, top: .15, width: .05, height: .05},
 ];
 
-addHandler('start', (session) => {
+addHandler('load_done', (session) => {
     session.inventory = [];
     for (const {left, top} of slotPositions) {
         makeSlot(session, left, top);
     }
 });
 
-addHandler('start restart', (session) => {
+addHandler('load_done restart', (session) => {
     for (const slot of session.inventory) {
         updateSlot(slot, undefined, 0);
     }

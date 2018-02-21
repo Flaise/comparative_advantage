@@ -2,8 +2,7 @@
   "scripts": {},
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "howler": "^2.0.9",
-    "skid": "0.0.12"
+    "skid": "0.0.13"
   },
   "devDependencies": {
     "browserify": "^16.0.0",

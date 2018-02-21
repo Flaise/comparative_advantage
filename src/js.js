@@ -1,5 +1,4 @@
 const {load} = require('skid/lib/load');
-const {addHandler, handle} = require('skid/lib/event');
 require('./viewport');
 require('./water');
 require('./port');
@@ -17,10 +16,5 @@ require('./mute');
 require('./preloader');
 
 window.addEventListener('load', () => {
-    const state = Object.create(null);
-    state.debug = true;
-    window.getState = () => state; // NOTE: For debugging introspection.
-    load(state);
+    load(true);
 });
-
-addHandler('load_done', (state) => handle(state, 'start'));

@@ -3,13 +3,13 @@ const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
-const {loadIcon} = require('skid/lib/load');
+const {loadIcon} = require('skid/lib/scene/icon');
+const {loadAudio} = require('skid/lib/audio');
 const {Visibility} = require('./visibility');
 const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
 const {canTrade, amountOf} = require('./inventory');
 const {inputEnabled} = require('./input');
-const {loadAudio} = require('./audio');
 
 const RARR = '\u2192';
 
@@ -24,7 +24,7 @@ addHandler('load', (session) => {
     loadAudio(session, 'trade', {src: ['./assets/trade.ogg', './assets/trade.mp3']});
 })
 
-addHandler('start', (session) => {
+addHandler('load_done', (session) => {
     session.vendorTrading = false;
     session.vendorsEnabled = false;
     session.vendors = [];
@@ -236,7 +236,7 @@ function updateVendorTextColor(session) {
     }
 }
 
-addHandler('start proceed_done gain lose trade_done proceed', (session) => {
+addHandler('load_done proceed_done gain lose trade_done proceed', (session) => {
     updateVendorTextColor(session);
 });
 

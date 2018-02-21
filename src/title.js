@@ -2,14 +2,14 @@ const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {Group} = require('skid/lib/scene/group');
 const {addHandler, handle} = require('skid/lib/event');
-const {loadAudio} = require('./audio');
+const {loadAudio} = require('skid/lib/audio');
 
 addHandler('load', (session) => {
     loadAudio(session, 'title', {src: ['./assets/menu.ogg', './assets/menu.mp3'], loop: true});
     session.title = {played: false};
 });
 
-addHandler('start', (session) => {
+addHandler('load_done', (session) => {
     const group = new Group(session.scene.ui);
 
     let position = new Translation(group);
