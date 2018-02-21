@@ -5,7 +5,7 @@ const {Camera} = require('skid/lib/scene/camera');
 const {Group} = require('skid/lib/scene/group');
 const {addHandler} = require('skid/lib/event');
 
-addHandler('start', (session) => {
+addHandler('load', (session) => {
     const renderer = new Viewport();
     renderer.canvas = canvas;
 

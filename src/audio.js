@@ -1,5 +1,5 @@
 const {Howl, Howler} = require('howler');
-const {loadData, startLoading, doneLoading} = require('skid/lib/load');
+const {loadData, startLoading, doneLoading, progressLoading} = require('skid/lib/load');
 const {addHandler} = require('skid/lib/event');
 
 function supportsFormat(format) {
@@ -25,6 +25,7 @@ function load(state, eventCode, howlArgs, id) {
 
 exports.loadAudio = function loadAudio(state, eventCode, howlArgs) {
     const id = startLoading(state);
+    progressLoading(state, id, 0, 0); // So 'load_progress' event can fire
     let src = howlArgs.src;
     if (!Array.isArray(src)) src = [src];
     for (const path of src) {

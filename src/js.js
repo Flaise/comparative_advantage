@@ -14,6 +14,7 @@ require('./gameover');
 require('./title');
 require('./music');
 require('./mute');
+require('./preloader');
 
 window.addEventListener('load', () => {
     const state = Object.create(null);
