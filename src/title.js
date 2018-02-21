@@ -2,10 +2,10 @@ const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {Group} = require('skid/lib/scene/group');
 const {addHandler, handle} = require('skid/lib/event');
-const {loadAudio2} = require('./audio');
+const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    loadAudio2(session, 'title', {src: ['./assets/menu.ogg', './assets/menu.mp3'], loop: true});
+    loadAudio(session, 'title', {src: ['./assets/menu.ogg', './assets/menu.mp3'], loop: true});
     session.title = {played: false};
 });
 

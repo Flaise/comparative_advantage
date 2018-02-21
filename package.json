@@ -3,9 +3,11 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "howler": "^2.0.9",
-    "skid": "0.0.10"
+    "skid": "0.0.11"
   },
   "devDependencies": {
-    "browserify": "^16.0.0"
-  }
+    "browserify": "^16.0.0",
+    "local-web-server": "^2.4.0"
+  },
+  "private": true
 }

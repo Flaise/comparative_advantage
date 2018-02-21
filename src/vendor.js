@@ -9,7 +9,7 @@ const {overlapsBounds} = require('./bounds');
 const {commodityTypes, commodityOfType, commodityDisplay} = require('./commodity');
 const {canTrade, amountOf} = require('./inventory');
 const {inputEnabled} = require('./input');
-const {loadAudio2} = require('./audio');
+const {loadAudio} = require('./audio');
 
 const RARR = '\u2192';
 
@@ -21,7 +21,7 @@ addHandler('load', (session) => {
     loadImage(session, 'vendor4');
     loadImage(session, 'vendor5');
     loadImage(session, 'vendor6');
-    loadAudio2(session, 'trade', {src: ['./assets/trade.ogg', './assets/trade.mp3']});
+    loadAudio(session, 'trade', {src: ['./assets/trade.ogg', './assets/trade.mp3']});
 })
 
 addHandler('start', (session) => {

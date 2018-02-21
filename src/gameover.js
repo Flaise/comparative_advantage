@@ -2,13 +2,13 @@ const {Translation} = require('skid/lib/scene/translation');
 const {TextAvatar} = require('skid/lib/scene/text-avatar');
 const {addHandler, handle} = require('skid/lib/event');
 const {handleLater} = require('skid/lib/timer');
-const {loadAudio2} = require('./audio');
+const {loadAudio} = require('./audio');
 
 const RARR = '\u2192';
 
 addHandler('load', (session) => {
-    loadAudio2(session, 'proceed_starve',
-               {src: ['./assets/game_over.ogg', './assets/game_over.mp3']});
+    loadAudio(session, 'proceed_starve',
+              {src: ['./assets/game_over.ogg', './assets/game_over.mp3']});
     session.gameover = {};
 });
 

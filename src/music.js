@@ -2,19 +2,17 @@ const {addHandler} = require('skid/lib/event');
 const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    const sound = loadAudio(session, {
+    loadAudio(session, 'music', {
         src: ['./assets/music.ogg', './assets/music.mp3'],
         sprite: {
             first: [0, 4545],
             loop: [4545, 99004, true], // 103549 = entire track
         },
-    });
-    session.music = {sound, state: 'loading'};
-    sound.once('load', () => {
-        session.music.state = 'loaded';
-    });
-    sound.once('end', () => {
-        sound.play('loop');
+    }).then((sound) => {
+        session.music = {sound, played: false};
+        sound.once('end', () => {
+            sound.play('loop');
+        });
     });
 });
 
@@ -27,9 +25,9 @@ addHandler('pageshow', (session) => {
 });
 
 addHandler('mousemove', (session) => {
-    if (session.music.state === 'loaded') {
+    if (!session.music.played) {
+        session.music.played = true;
         session.music.sound.play('first');
-        session.music.state = 'played';
     }
 });
 

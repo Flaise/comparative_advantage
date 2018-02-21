@@ -4,13 +4,15 @@ const {loadIcon} = require('skid/lib/load');
 const {loadAudio} = require('./audio');
 
 addHandler('load', (session) => {
-    session.sailSound = loadAudio(session, {
+    loadAudio(session, 'sail', {
         src: ['./assets/sail.ogg', './assets/sail.mp3'],
         loop: true,
-    });
-    session.sailSound.on('fade', () => {
-        session.sailSound.stop();
-        session.sailSound.volume(1);
+    }).then((sound) => {
+        session.sailSound = sound;
+        sound.on('fade', () => {
+            sound.stop();
+            sound.volume(1);
+        });
     });
     session.shipIcon = loadIcon(session, `./assets/ship1.png`, 0, 0, 1000);
 });
