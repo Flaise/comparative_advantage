@@ -24,8 +24,7 @@ function load(state, eventCode, howlArgs, id) {
 }
 
 exports.loadAudio = function loadAudio(state, eventCode, howlArgs) {
-    const id = startLoading(state);
-    progressLoading(state, id, 0, 0); // So 'load_progress' event can fire
+    const id = startLoading(state, 0); // 0 size so 'load_progress' event can fire
     let src = howlArgs.src;
     if (!Array.isArray(src)) src = [src];
     for (const path of src) {

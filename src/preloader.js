@@ -10,6 +10,7 @@ addHandler('load', (state) => {
     meter.w.setTo(.03);
     meter.h.setTo(.03);
     meter.fillStyle = 'black';
+    meter.innerRadiusRel.setTo(.6);
 
     const textPosition = new Translation(state.scene.ui);
     textPosition.x.setTo(.5);
@@ -22,11 +23,17 @@ addHandler('load', (state) => {
     text.font = '18px verdana';
     text.text = 'Loading...';
 
-    state.preloader = {meter, textPosition};
+    state.preloader = {meter, textPosition, text};
 });
 
 addHandler('load_progress', (state, progress) => {
     state.preloader.meter.breadth.setTo(-progress);
+});
+
+addHandler('load_error', (state) => {
+    state.preloader.meter.fillStyle = '#b00';
+    state.preloader.text.fillStyle = '#b00';
+    state.preloader.text.text = `Error`;
 });
 
 addHandler('load_done', (state) => {
