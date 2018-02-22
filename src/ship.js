@@ -26,6 +26,6 @@ addHandler('proceed', (session) => {
     session.sailSound.play();
 });
 
-addHandler('proceed_done', (session) => {
+addHandler('proceed_done proceed_starve', (session) => {
     session.sailSound.fade(1, 0, 500);
 });

@@ -4,19 +4,24 @@ const {Group} = require('skid/lib/scene/group');
 const {addHandler, handle} = require('skid/lib/event');
 const {loadAudio} = require('skid/lib/audio');
 
-addHandler('load', (session) => {
-    loadAudio(session, 'title', {src: ['./assets/menu.ogg', './assets/menu.mp3'], loop: true});
-    session.title = {played: false};
+addHandler('load', (state) => {
+    loadAudio(state, 'title', {
+        src: ['./assets/menu.ogg', './assets/menu.mp3'],
+        loop: true,
+    }).then((sound) => {
+        state.title.sound = sound;
+    });
+    state.title = {played: false, done: false};
 });
 
-addHandler('load_done', (session) => {
-    const group = new Group(session.scene.ui);
+addHandler('load_done', (state) => {
+    const group = new Group(state.scene.ui);
 
     let position = new Translation(group);
     position.x.setTo(.5);
     position.y.setTo(.75 / 2);
 
-    let text = new TextAvatar(position, session.scene.camera);
+    let text = new TextAvatar(position, state.scene.camera);
     text.text = 'Comparative Advantage';
     text.textAlign = 'center';
     text.textBaseline = 'middle';
@@ -30,7 +35,7 @@ addHandler('load_done', (session) => {
     position.x.setTo(.38);
     position.y.setTo(.52);
 
-    text = new TextAvatar(position, session.scene.camera);
+    text = new TextAvatar(position, state.scene.camera);
     text.text = 'Design and programming by Flaise';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
@@ -44,7 +49,7 @@ addHandler('load_done', (session) => {
     position.x.setTo(.38);
     position.y.setTo(.56);
 
-    text = new TextAvatar(position, session.scene.camera);
+    text = new TextAvatar(position, state.scene.camera);
     text.text = 'Graphics by Joy Hua';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
@@ -58,7 +63,7 @@ addHandler('load_done', (session) => {
     position.x.setTo(.532);
     position.y.setTo(.6);
 
-    text = new TextAvatar(position, session.scene.camera);
+    text = new TextAvatar(position, state.scene.camera);
     text.text = 'Tristion Edison';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
@@ -72,7 +77,7 @@ addHandler('load_done', (session) => {
     position.x.setTo(.38);
     position.y.setTo(.64);
 
-    text = new TextAvatar(position, session.scene.camera);
+    text = new TextAvatar(position, state.scene.camera);
     text.text = 'Audio by Lauren X. Pham';
     text.textAlign = 'left';
     text.textBaseline = 'bottom';
@@ -82,17 +87,29 @@ addHandler('load_done', (session) => {
     text.font = '24px verdana';
     text.layer = 9;
 
-    session.title.group = group;
+    state.title.group = group;
 });
 
-addHandler('proceed_eat_done', (session) => {
-    session.title.group.remove();
-    handle(session, 'title_stop');
+addHandler('proceed_eat_done', (state) => {
+    if (state.title.done) return;
+    state.title.done = true;
+    state.title.group.remove();
+    handle(state, 'title_stop');
 });
 
-addHandler('mousemove', (session) => {
-    if (!session.title.played) {
-        session.title.played = true;
-        handle(session, 'title');
+addHandler('mousemove', (state) => {
+    if (!state.title.played) {
+        state.title.played = true;
+        handle(state, 'title');
     }
+});
+
+addHandler('pagehide', (state) => {
+    if (state.title.done) return;
+    state.title.sound.fade(1, 0, 500);
+});
+
+addHandler('pageshow', (state) => {
+    if (state.title.done) return;
+    state.title.sound.fade(0, 1, 800);
 });
